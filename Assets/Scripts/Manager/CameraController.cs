@@ -1,0 +1,53 @@
+using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+
+public class CameraController : MonoBehaviour
+{
+    [SerializeField] private Camera firstPersonCamera;
+    [SerializeField] private Camera thirdPersonCamera;
+    [SerializeField] private Transform player;
+    [SerializeField] private Vector3 thirdPersonOffset = new Vector3(0, 2, -5);
+
+    private bool isFirstPerson = true;
+    private float transitionSpeed = 1.5f;
+    public Transform target;
+
+    void Start()
+    {
+        
+        SetCameraMode(true);
+    }
+
+    void Update()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            isFirstPerson = !isFirstPerson;
+            SetCameraMode(isFirstPerson);
+        }
+
+        if (!isFirstPerson && thirdPersonCamera.gameObject.activeSelf)
+        {
+            Vector3 targetPosition = player.position + player.TransformDirection(thirdPersonOffset);
+            thirdPersonCamera.transform.position = Vector3.Lerp(
+                thirdPersonCamera.transform.position,
+                targetPosition,
+                Time.deltaTime * transitionSpeed);
+
+           
+            thirdPersonCamera.transform.LookAt(player);
+        }
+    }
+
+    void SetCameraMode(bool firstPerson)
+    {
+        firstPersonCamera.gameObject.SetActive(firstPerson);
+        thirdPersonCamera.gameObject.SetActive(!firstPerson);
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+}
