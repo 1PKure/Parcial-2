@@ -10,7 +10,8 @@ public class GhostController : MonoBehaviour
     private void Start()
     {
         cameraController = Camera.main.GetComponent<CameraController>();
-        originalBody = transform;
+        originalBody = GameObject.FindWithTag("Player").transform;
+        //cameraController.SetTarget(originalBody);
     }
     void Update()
     {
@@ -41,15 +42,18 @@ public class GhostController : MonoBehaviour
         IPossessable possessable = target.GetComponent<IPossessable>();
         if (possessable == null) return;
 
+        if (originalBody.TryGetComponent(out IPossessable originalPossessable))
+            originalPossessable.OnPossessed();
+
         currentBody = Instantiate(target, target.transform.position, target.transform.rotation);
 
         if (currentBody.TryGetComponent(out IPossessable newPossessed))
             newPossessed.OnPossessed();
 
         currentBody.AddComponent<PlayerPossessedController>();
-        cameraController.SetTarget(currentBody.transform); 
+        cameraController.SetTarget(currentBody.transform);
 
-        gameObject.SetActive(false); 
+        gameObject.SetActive(false);
     }
 
     void Release()
@@ -59,13 +63,15 @@ public class GhostController : MonoBehaviour
             if (currentBody.TryGetComponent(out IPossessable possessed))
                 possessed.OnReleased();
 
-            transform.position = currentBody.transform.position;
-
             Destroy(currentBody);
             currentBody = null;
 
             gameObject.SetActive(true);
-            cameraController.SetTarget(originalBody); 
+
+            if (originalBody.TryGetComponent(out IPossessable originalPossessable))
+                originalPossessable.OnReleased();
+
+            cameraController.SetTarget(originalBody);
         }
     }
 }
