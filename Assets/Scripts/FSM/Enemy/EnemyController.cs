@@ -20,6 +20,10 @@ public class EnemyController : MonoBehaviour
     {
         stateMachine.Update();
     }
+    public StateMachine GetStateMachine()
+    {
+        return stateMachine;
+    }
 
     public void ChangeState(State newState) => stateMachine.ChangeState(newState);
 

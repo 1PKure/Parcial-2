@@ -4,11 +4,12 @@ public class PlayerIdleState : State
 {
     private PlayerController player;
 
-    public PlayerIdleState(PlayerController player)
+    public PlayerIdleState(PlayerController playerController)
+        : base(playerController.gameObject, playerController.GetStateMachine())
     {
-        this.player = player;
-    }
 
+        player = playerController;
+    }
     public override void Enter() { }
 
     public override void Update()

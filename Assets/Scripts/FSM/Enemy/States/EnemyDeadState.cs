@@ -2,9 +2,10 @@ public class EnemyDeadState : State
 {
     private EnemyController enemy;
 
-    public EnemyDeadState(EnemyController enemy)
+    public EnemyDeadState(EnemyController enemyController)
+        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
-        this.enemy = enemy;
+        enemy = enemyController;
     }
 
     public override void Enter()

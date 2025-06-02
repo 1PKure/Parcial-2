@@ -6,9 +6,10 @@ public class EnemyAttackState : State
     private float attackCooldown = 1.5f;
     private float lastAttackTime = 0;
 
-    public EnemyAttackState(EnemyController enemy)
+    public EnemyAttackState(EnemyController enemyController)
+        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
-        this.enemy = enemy;
+        enemy = enemyController;
     }
 
     public override void Enter() { lastAttackTime = Time.time - attackCooldown; }

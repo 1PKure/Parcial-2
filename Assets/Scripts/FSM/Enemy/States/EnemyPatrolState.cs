@@ -5,9 +5,10 @@ public class EnemyPatrolState : State
     private EnemyController enemy;
     private int currentPoint = 0;
 
-    public EnemyPatrolState(EnemyController enemy)
+    public EnemyPatrolState(EnemyController enemyController)
+        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
-        this.enemy = enemy;
+        enemy = enemyController;
     }
 
     public override void Enter() { }

@@ -6,6 +6,10 @@ public class WispStateChanger : MonoBehaviour
     public Vector2 baseOffset;
     public Vector2 possessedOffset;
 
+    private void Awake()
+    {
+        rend = GetComponent<Renderer>();
+    }
     public void SetBaseState()
     {
         rend.material.mainTextureOffset = baseOffset;
@@ -14,38 +18,5 @@ public class WispStateChanger : MonoBehaviour
     public void SetPossessedState()
     {
         rend.material.mainTextureOffset = possessedOffset;
-    }
-
-    private void Awake()
-    {
-        rend = GetComponent<Renderer>();
-    }
-
-    public void OnPossessed()
-    {
-        if (rend != null)
-        {
-            rend.material.color = Color.gray;
-        }
-
-        PlayerController playerController = GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.enabled = false;
-        }
-    }
-
-    public void OnReleased()
-    {
-        if (rend != null)
-        {
-            rend.material.color = Color.white;
-        }
-
-        PlayerController playerController = GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.enabled = true;
-        }
     }
 }

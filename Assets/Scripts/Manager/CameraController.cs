@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
     {
         
         SetCameraMode(true);
+        SetTarget(player);
     }
 
     void Update()
@@ -27,16 +28,15 @@ public class CameraController : MonoBehaviour
             SetCameraMode(isFirstPerson);
         }
 
-        if (!isFirstPerson && thirdPersonCamera.gameObject.activeSelf)
+        if (!isFirstPerson && thirdPersonCamera.gameObject.activeSelf && target != null)
         {
-            Vector3 targetPosition = player.position + player.TransformDirection(thirdPersonOffset);
+            Vector3 targetPosition = target.position + target.TransformDirection(thirdPersonOffset);
             thirdPersonCamera.transform.position = Vector3.Lerp(
                 thirdPersonCamera.transform.position,
                 targetPosition,
                 Time.deltaTime * transitionSpeed);
 
-           
-            thirdPersonCamera.transform.LookAt(player);
+            thirdPersonCamera.transform.LookAt(target);
         }
     }
 

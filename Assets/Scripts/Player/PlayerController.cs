@@ -15,6 +15,11 @@ public class PlayerController : MonoBehaviour
         stateMachine.Update();
     }
 
+    public StateMachine GetStateMachine()
+    {
+        return stateMachine;
+    }
+
     public void Move(Vector3 direction)
     {
         transform.Translate(direction * Time.deltaTime * 5f);

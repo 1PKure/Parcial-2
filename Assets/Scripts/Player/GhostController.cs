@@ -4,22 +4,27 @@ public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
     private GameObject currentBody;
-    private CameraController cameraController;
+    [SerializeField] private CameraController cameraController;
     private Transform originalBody;
+    private bool isPossessing = false;
 
     private void Start()
     {
-        cameraController = Camera.main.GetComponent<CameraController>();
         originalBody = GameObject.FindWithTag("Player").transform;
-        //cameraController.SetTarget(originalBody);
+        if (cameraController == null)
+            Debug.LogError("CameraController no asignado en GhostController!");
+
+        if (cameraController != null)
+            cameraController.SetTarget(originalBody);
+
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isPossessing && Input.GetKeyDown(KeyCode.E))
         {
             TryPossess();
         }
-        else if (Input.GetKeyDown(KeyCode.Q) && currentBody != null)
+        else if (isPossessing && Input.GetKeyDown(KeyCode.Q) && currentBody != null)
         {
             Release();
         }
@@ -27,7 +32,8 @@ public class GhostController : MonoBehaviour
 
     void TryPossess()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, possessionRange))
         {
             if (hit.collider.CompareTag("Possessable"))
@@ -39,34 +45,37 @@ public class GhostController : MonoBehaviour
 
     void Possess(GameObject target)
     {
+        isPossessing = true;
         IPossessable possessable = target.GetComponent<IPossessable>();
         if (possessable == null) return;
 
         if (originalBody.TryGetComponent(out IPossessable originalPossessable))
             originalPossessable.OnPossessed();
 
-        currentBody = Instantiate(target, target.transform.position, target.transform.rotation);
+        currentBody = target;
 
         if (currentBody.TryGetComponent(out IPossessable newPossessed))
             newPossessed.OnPossessed();
 
         currentBody.AddComponent<PlayerPossessedController>();
         cameraController.SetTarget(currentBody.transform);
-
-        gameObject.SetActive(false);
     }
 
     void Release()
     {
+
         if (currentBody != null)
         {
             if (currentBody.TryGetComponent(out IPossessable possessed))
                 possessed.OnReleased();
 
-            Destroy(currentBody);
-            currentBody = null;
+            var possessedController = currentBody.GetComponent<PlayerPossessedController>();
+            if (possessedController != null)
+                Destroy(possessedController);
 
-            gameObject.SetActive(true);
+            currentBody = null;
+            isPossessing = false;
+
 
             if (originalBody.TryGetComponent(out IPossessable originalPossessable))
                 originalPossessable.OnReleased();

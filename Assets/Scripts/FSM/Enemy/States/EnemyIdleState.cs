@@ -2,9 +2,10 @@ public class EnemyIdleState : State
 {
     private EnemyController enemy;
 
-    public EnemyIdleState(EnemyController enemy)
+    public EnemyIdleState(EnemyController enemyController)
+        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
-        this.enemy = enemy;
+        enemy = enemyController;
     }
 
     public override void Enter() { }

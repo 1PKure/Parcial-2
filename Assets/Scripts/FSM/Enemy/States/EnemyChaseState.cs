@@ -4,9 +4,10 @@ public class EnemyChaseState : State
 {
     private EnemyController enemy;
 
-    public EnemyChaseState(EnemyController enemy)
+    public EnemyChaseState(EnemyController enemyController)
+        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
-        this.enemy = enemy;
+        enemy = enemyController;
     }
 
     public override void Enter() { }
