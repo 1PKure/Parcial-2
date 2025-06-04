@@ -1,3 +1,4 @@
+using Clase10;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -11,10 +12,11 @@ public class CameraController : MonoBehaviour
     private bool isFirstPerson = true;
     private float transitionSpeed = 1.5f;
     public Transform target;
+    private PlayerController2 playerController;
+    private Camera activeCamera;
 
     void Start()
     {
-        
         SetCameraMode(true);
         SetTarget(player);
     }

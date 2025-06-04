@@ -1,3 +1,4 @@
+using Clase10;
 using UnityEngine;
 
 public class EnemyAttackState : State
@@ -7,7 +8,6 @@ public class EnemyAttackState : State
     private float lastAttackTime = 0;
 
     public EnemyAttackState(EnemyController enemyController)
-        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
         enemy = enemyController;
     }

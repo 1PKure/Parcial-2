@@ -1,4 +1,5 @@
 using UnityEngine;
+using Clase10;
 
 public class PlayerBody : MonoBehaviour, IPossessable
 {
@@ -13,7 +14,7 @@ public class PlayerBody : MonoBehaviour, IPossessable
     {
         if (rend != null)
             rend.material.color = Color.gray;
-        var playerController = GetComponent<PlayerController>();
+        var playerController = GetComponent<PlayerController2>();
         if (playerController != null)
         {
             playerController.enabled = false;
@@ -24,7 +25,7 @@ public class PlayerBody : MonoBehaviour, IPossessable
     {
         if (rend != null)
             rend.material.color = Color.white;
-        var playerController = GetComponent<PlayerController>();
+        var playerController = GetComponent<PlayerController2>();
         if (playerController != null)
         {
             playerController.enabled = true;

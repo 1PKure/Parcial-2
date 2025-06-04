@@ -1,15 +1,9 @@
-using UnityEngine;
-
-public abstract class State
+namespace Clase10
 {
-    protected GameObject owner;
-    protected StateMachine stateMachine;
-    protected State(GameObject owner, StateMachine stateMachine)
+    public abstract class State
     {
-        this.owner = owner;
-        this.stateMachine = stateMachine;
+        public virtual void Enter() { }
+        public virtual void Update() { }
+        public virtual void Exit() { }
     }
-    public abstract void Enter();
-    public abstract void Update();
-    public abstract void Exit();
 }

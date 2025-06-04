@@ -1,20 +1,25 @@
-public class StateMachine
+namespace Clase10
 {
-    private State currentState;
-    public void Initialize(State startingState)
+    public class StateMachine
     {
-        currentState = startingState;
-        currentState.Enter();
-    }
-    public void ChangeState(State newState)
-    {
-        currentState?.Exit();
-        currentState = newState;
-        currentState.Enter();
-    }
+        private State currentState;
 
-    public void Update()
-    {
-        currentState?.Update();
+        public void Initialize(State startingState)
+        {
+            currentState = startingState;
+            currentState.Enter();
+        }
+
+        public void ChangeState(State newState)
+        {
+            currentState?.Exit();
+            currentState = newState;
+            currentState.Enter();
+        }
+
+        public void Update()
+        {
+            currentState?.Update();
+        }
     }
 }

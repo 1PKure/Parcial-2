@@ -1,9 +1,10 @@
+using Clase10;
+
 public class EnemyDeadState : State
 {
     private EnemyController enemy;
 
     public EnemyDeadState(EnemyController enemyController)
-        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
         enemy = enemyController;
     }

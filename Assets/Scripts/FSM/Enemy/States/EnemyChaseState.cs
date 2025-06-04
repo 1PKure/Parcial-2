@@ -1,3 +1,4 @@
+using Clase10;
 using UnityEngine;
 
 public class EnemyChaseState : State
@@ -5,7 +6,6 @@ public class EnemyChaseState : State
     private EnemyController enemy;
 
     public EnemyChaseState(EnemyController enemyController)
-        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
         enemy = enemyController;
     }

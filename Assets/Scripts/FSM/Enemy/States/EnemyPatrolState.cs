@@ -1,3 +1,4 @@
+using Clase10;
 using UnityEngine;
 
 public class EnemyPatrolState : State
@@ -6,7 +7,6 @@ public class EnemyPatrolState : State
     private int currentPoint = 0;
 
     public EnemyPatrolState(EnemyController enemyController)
-        : base(enemyController.gameObject, enemyController.GetStateMachine())
     {
         enemy = enemyController;
     }
