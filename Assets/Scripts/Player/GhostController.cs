@@ -1,21 +1,19 @@
+using Clase10;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
     private GameObject currentBody;
-    [SerializeField] private CameraController cameraController;
+    [SerializeField] private PlayerController2 playerController;
     private Transform originalBody;
     private bool isPossessing = false;
 
     private void Start()
     {
         originalBody = GameObject.FindWithTag("Player").transform;
-        if (cameraController == null)
-            Debug.LogError("CameraController no asignado en GhostController!");
-
-        if (cameraController != null)
-            cameraController.SetTarget(originalBody);
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController2>();
+        originalBody = playerController.transform;
 
     }
     void Update()
@@ -58,7 +56,8 @@ public class GhostController : MonoBehaviour
             newPossessed.OnPossessed();
 
         currentBody.AddComponent<PlayerPossessedController>();
-        cameraController.SetTarget(currentBody.transform);
+        playerController.ChangeState(new PlayerPossessedState(playerController));
+        playerController.SetCameraTarget(currentBody.transform);
     }
 
     void Release()
@@ -80,7 +79,8 @@ public class GhostController : MonoBehaviour
             if (originalBody.TryGetComponent(out IPossessable originalPossessable))
                 originalPossessable.OnReleased();
 
-            cameraController.SetTarget(originalBody);
+            playerController.SetCameraTarget(currentBody.transform);
+            playerController.ChangeState(new PlayerIdleState(playerController));
         }
     }
 }

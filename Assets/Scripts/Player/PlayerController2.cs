@@ -43,6 +43,7 @@ namespace Clase10
             // Inicializar la FSM
             stateMachine = new StateMachine();
             stateMachine.ChangeState(new PlayerIdleState(this));
+            cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
         }
 
         private void Update()
@@ -51,6 +52,7 @@ namespace Clase10
             HandleRotation();
             if (Input.GetKeyDown(KeyCode.C))
             {
+                Debug.Log("C key pressed, toggling camera view.");
                 isFirstPerson = !isFirstPerson;
 
                 cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
@@ -167,6 +169,11 @@ namespace Clase10
 
             Vector3 moveDir = (camForward * vertical + camRight * horizontal).normalized;
             return moveDir;
+        }
+
+        public void SetCameraTarget(Transform newTarget)
+        {
+            cameraTransform = newTarget;
         }
     }
 }
