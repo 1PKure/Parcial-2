@@ -56,7 +56,7 @@ public class GhostController : MonoBehaviour
             newPossessed.OnPossessed();
 
         currentBody.AddComponent<PlayerPossessedController>();
-        playerController.ChangeState(new PlayerPossessedState(playerController));
+        //playerController.ChangeState(new PlayerPossessedState(playerController));
         playerController.SetCameraTarget(currentBody.transform);
     }
 
