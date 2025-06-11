@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //[SerializeField] private PlayerData playerData;
-    [SerializeField] private Transform cameraHolder;
+    public Transform cameraHolder;
     public Transform cameraTransform;
 
     private CharacterController controller;

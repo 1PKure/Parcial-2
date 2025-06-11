@@ -7,6 +7,8 @@ public class GhostController : MonoBehaviour
     private GameObject currentBody;
     [SerializeField] private PlayerController playerController;
     private Transform originalBody;
+    private Transform cameraHolder;
+    private CameraController cameraController;
     private bool isPossessing = false;
 
     private void Start()
@@ -14,6 +16,8 @@ public class GhostController : MonoBehaviour
         originalBody = GameObject.FindWithTag("Player").transform;
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         originalBody = playerController.transform;
+        cameraHolder = playerController.cameraHolder;
+        cameraController = cameraHolder.GetComponent<CameraController>();
 
     }
     void Update()
@@ -49,13 +53,22 @@ public class GhostController : MonoBehaviour
 
         if (originalBody.TryGetComponent(out IPossessable originalPossessable))
             originalPossessable.OnPossessed();
-
+        playerController.enabled = false;
+        foreach (var component in originalBody.GetComponents<MonoBehaviour>())
+        {
+            if (component != this)
+                component.enabled = false;
+        }
         currentBody = target;
 
         if (currentBody.TryGetComponent(out IPossessable newPossessed))
             newPossessed.OnPossessed();
 
         currentBody.AddComponent<PlayerPossessedController>();
+        cameraHolder.SetParent(currentBody.transform);
+        cameraHolder.localPosition = Vector3.zero;
+        cameraHolder.localRotation = Quaternion.identity;
+        cameraController.SetTarget(currentBody.transform);
         //playerController.ChangeState(new PlayerPossessedState(playerController));
         //playerController.SetCameraTarget(currentBody.transform);
     }
@@ -79,8 +92,19 @@ public class GhostController : MonoBehaviour
             if (originalBody.TryGetComponent(out IPossessable originalPossessable))
                 originalPossessable.OnReleased();
 
+            playerController.enabled = true; // Reactiva el PlayerController
+            foreach (var component in originalBody.GetComponents<MonoBehaviour>())
+            {
+                component.enabled = true;
+            }
+
             playerController.SetCameraTarget(currentBody.transform);
+            cameraHolder.SetParent(originalBody);
+            cameraHolder.localPosition = Vector3.zero;
+            cameraHolder.localRotation = Quaternion.identity;
             //playerController.ChangeState(new PlayerIdleState(playerController));
+
+            cameraController.SetTarget(originalBody);
         }
     }
 }
