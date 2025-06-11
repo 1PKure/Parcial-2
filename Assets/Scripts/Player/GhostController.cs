@@ -5,14 +5,14 @@ public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
     private GameObject currentBody;
-    [SerializeField] private PlayerController2 playerController;
+    [SerializeField] private PlayerController playerController;
     private Transform originalBody;
     private bool isPossessing = false;
 
     private void Start()
     {
         originalBody = GameObject.FindWithTag("Player").transform;
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController2>();
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         originalBody = playerController.transform;
 
     }
@@ -57,7 +57,7 @@ public class GhostController : MonoBehaviour
 
         currentBody.AddComponent<PlayerPossessedController>();
         //playerController.ChangeState(new PlayerPossessedState(playerController));
-        playerController.SetCameraTarget(currentBody.transform);
+        //playerController.SetCameraTarget(currentBody.transform);
     }
 
     void Release()
@@ -80,7 +80,7 @@ public class GhostController : MonoBehaviour
                 originalPossessable.OnReleased();
 
             playerController.SetCameraTarget(currentBody.transform);
-            playerController.ChangeState(new PlayerIdleState(playerController));
+            //playerController.ChangeState(new PlayerIdleState(playerController));
         }
     }
 }

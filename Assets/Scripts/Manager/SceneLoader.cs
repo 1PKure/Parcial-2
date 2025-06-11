@@ -5,28 +5,55 @@ using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
-    public GameObject loadingScreen;
-    public Slider loadingBar;
+    public static SceneLoader Instance { get; private set; }
 
-    public void LoadScene(string sceneName)
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Slider fakeLoadingBar;
+    [SerializeField] private float fakeDuration = 3f;
+
+    private void Awake()
     {
-        StartCoroutine(LoadAsync(sceneName));
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    IEnumerator LoadAsync(string sceneName)
+    private void Start()
+    {
+        if (GameManager.Instance != null && !string.IsNullOrEmpty(GameManager.Instance.sceneToLoad))
+        {
+            StartCoroutine(LoadSceneAsync(GameManager.Instance.sceneToLoad));
+        }
+        else
+        {
+            Debug.LogWarning("No hay escena objetivo para cargar.");
+        }
+    }
+    public void StartFakeLoad(string targetScene)
+    {
+        StartCoroutine(LoadSceneAsync(targetScene));
+    }
+    public IEnumerator LoadSceneAsync(string targetScene)
     {
         loadingScreen.SetActive(true);
-        float fakeProgress = 0f;
+        fakeLoadingBar.value = 0;
 
-        while (fakeProgress < 1f)
+        float elapsed = 0;
+        while (elapsed < fakeDuration)
         {
-            fakeProgress += Time.deltaTime * 0.3f;
-            loadingBar.value = fakeProgress;
+            elapsed += Time.deltaTime;
+            fakeLoadingBar.value = Mathf.Clamp01(elapsed / fakeDuration);
             yield return null;
         }
 
-        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
-        while (!op.isDone)
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(targetScene);
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+        {
             yield return null;
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        asyncLoad.allowSceneActivation = true;
     }
 }
