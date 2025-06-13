@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     public List<Transform> patrolPoints;
     public float speed = 2f;
     public float detectionRange = 5f;
+    public float maxChaseDistance = 10f;
     public Transform player;
 
     private StateMachine stateMachine;
@@ -38,5 +39,11 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 dir = (target - transform.position).normalized;
         transform.position += dir * speed * Time.deltaTime;
+    }
+
+    public bool PlayerTooFar()
+    {
+        if (player == null) return true;
+        return Vector3.Distance(transform.position, player.position) > maxChaseDistance;
     }
 }

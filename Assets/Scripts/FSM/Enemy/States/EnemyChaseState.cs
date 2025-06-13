@@ -16,14 +16,19 @@ public class EnemyChaseState : State
     {
         if (!enemy.PlayerInRange())
         {
-            enemy.ChangeState(new EnemyPatrolState(enemy));
-            return;
+            if (enemy.PlayerTooFar())
+            {
+                enemy.ChangeState(new EnemyPatrolState(enemy));
+                return;
+            }
         }
 
         enemy.MoveTo(enemy.player.position);
 
         if (Vector3.Distance(enemy.transform.position, enemy.player.position) < 1.5f)
+        {
             enemy.ChangeState(new EnemyAttackState(enemy));
+        }
     }
 
     public override void Exit() { }

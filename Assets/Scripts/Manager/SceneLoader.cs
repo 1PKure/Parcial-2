@@ -10,50 +10,64 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Slider fakeLoadingBar;
     [SerializeField] private float fakeDuration = 3f;
+    [SerializeField] private Canvas Canvas;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    public void LoadSceneWithFakeLoading(string sceneName)
     {
-        if (GameManager.Instance != null && !string.IsNullOrEmpty(GameManager.Instance.sceneToLoad))
+        if (loadingScreen == null || fakeLoadingBar == null)
         {
-            StartCoroutine(LoadSceneAsync(GameManager.Instance.sceneToLoad));
+            Debug.LogError("SceneLoader: loadingScreen o fakeLoadingBar no están asignados.");
+            return;
         }
-        else
-        {
-            Debug.LogWarning("No hay escena objetivo para cargar.");
-        }
+        StartCoroutine(LoadSceneWithFakeBar(sceneName));
     }
-    public void StartFakeLoad(string targetScene)
-    {
-        StartCoroutine(LoadSceneAsync(targetScene));
-    }
-    public IEnumerator LoadSceneAsync(string targetScene)
+
+    private IEnumerator LoadSceneWithFakeBar(string sceneName)
     {
         loadingScreen.SetActive(true);
+        fakeLoadingBar.gameObject.SetActive(true);
+        Canvas.enabled = false;
         fakeLoadingBar.value = 0;
 
-        float elapsed = 0;
+        AsyncOperation realLoad = SceneManager.LoadSceneAsync(sceneName);
+        realLoad.allowSceneActivation = false;
+
+        float elapsed = 0f;
+
         while (elapsed < fakeDuration)
         {
             elapsed += Time.deltaTime;
-            fakeLoadingBar.value = Mathf.Clamp01(elapsed / fakeDuration);
+            float fakeProgress = Mathf.Clamp01(elapsed / fakeDuration);
+            fakeLoadingBar.value = fakeProgress;
+
+            if (realLoad.progress >= 0.9f && fakeProgress >= 0.99f)
+                break;
+
             yield return null;
         }
+        yield return new WaitForSeconds(0.3f);
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(targetScene);
-        asyncLoad.allowSceneActivation = false;
+        fakeLoadingBar.value = 1f;
 
-        while (asyncLoad.progress < 0.9f)
-        {
+        realLoad.allowSceneActivation = true;
+        while (!realLoad.isDone)
             yield return null;
-        }
 
-        yield return new WaitForSeconds(0.5f);
-        asyncLoad.allowSceneActivation = true;
+        if (loadingScreen != null)
+            loadingScreen.SetActive(false);
+
+        if (fakeLoadingBar != null)
+            fakeLoadingBar.gameObject.SetActive(false);
     }
 }
