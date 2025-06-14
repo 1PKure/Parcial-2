@@ -5,7 +5,7 @@ public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
     private GameObject currentBody;
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] private PlayerController2 playerController;
     private Transform originalBody;
     private Transform cameraHolder;
     private CameraController cameraController;
@@ -14,9 +14,9 @@ public class GhostController : MonoBehaviour
     private void Start()
     {
         originalBody = GameObject.FindWithTag("Player").transform;
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController2>();
         originalBody = playerController.transform;
-        cameraHolder = playerController.cameraHolder;
+        cameraHolder = playerController.cameraTransform;
         cameraController = cameraHolder.GetComponent<CameraController>();
 
     }

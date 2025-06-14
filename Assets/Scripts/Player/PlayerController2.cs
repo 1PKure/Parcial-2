@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Clase10
-{
+
     public class PlayerController2 : MonoBehaviour
     {
         public Transform pivot;
@@ -128,7 +127,7 @@ namespace Clase10
                 timeAudio = 0;
                 if (index < clips.Count)
                     audioSource.clip = clips[index];
-                audioSource.Play();
+                //audioSource.Play();
             }
         }
 
@@ -176,4 +175,3 @@ namespace Clase10
             cameraTransform = newTarget;
         }
     }
-}

@@ -64,8 +64,8 @@ GameObject:
   - component: {fileID: 616507657892603726}
   - component: {fileID: 2059887586603515413}
   - component: {fileID: 7322386518387884174}
-  - component: {fileID: 4096141060244496571}
-  - component: {fileID: 1612631068605663399}
+  - component: {fileID: 6202503438135348651}
+  - component: {fileID: 6817036475439311204}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5202777633972941435}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec89ca5a0b6e2d54e84f8b6997b02333, type: 3}
   m_Name: 
@@ -182,37 +182,11 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.4
   m_Center: {x: 0.01, y: 0.08, z: -0.03}
---- !u!143 &4096141060244496571
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5202777633972941435}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 0.5
-  m_Radius: 0.4
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1612631068605663399
+--- !u!114 &6202503438135348651
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,18 +195,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 5202777633972941435}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cb4073bda0f4024c80087bb187b5010, type: 3}
+  m_Script: {fileID: 11500000, guid: 810598ccae641864bb75b420679867a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraHolder: {fileID: 6658141186571258479}
-  cameraTransform: {fileID: 0}
-  jumpHeight: 2
-  gravity: -9.81
-  groundCheck: {fileID: 1905290505490729808}
-  groundDistance: 0.4
-  groundMask:
+  maxHealth: 100
+  healthBar: {fileID: 0}
+--- !u!54 &6817036475439311204
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5202777633972941435}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &6564500593861237686
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,5 @@
 using UnityEngine;
 
-namespace Clase10
-{
     public class PlayerIdleState : State
     {
         private PlayerController2 player;
@@ -31,4 +29,3 @@ namespace Clase10
             Debug.Log("Exited Idle State");
         }
     }
-}

@@ -1,7 +1,5 @@
 using UnityEngine;
 
-namespace Clase10
-{
     public class PlayerMoveState : State
     {
         private PlayerController2 player;
@@ -34,4 +32,3 @@ namespace Clase10
             Debug.Log("Exited Move State");
         }
     }
-}

@@ -1,5 +1,4 @@
-namespace Clase10
-{
+
     public class StateMachine
     {
         private State currentState;
@@ -22,4 +21,3 @@ namespace Clase10
             currentState?.Update();
         }
     }
-}
