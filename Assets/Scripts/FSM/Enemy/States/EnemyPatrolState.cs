@@ -4,29 +4,43 @@ public class EnemyPatrolState : State
 {
     public override StateType StateType => StateType.Patrol;
 
-    private EnemyController enemy;
+    private MonoBehaviour enemyBase;
     private int currentPoint = 0;
 
-    public EnemyPatrolState(EnemyController enemy) : base(enemy.gameObject, enemy.GetStateMachine())
+    public EnemyPatrolState(MonoBehaviour enemy)
+        : base(enemy.gameObject, enemy.GetComponent<StateMachine>())
     {
-        this.enemy = enemy;
+        enemyBase = enemy;
     }
 
     public override void Enter() { }
 
     public override void Update()
     {
-        if (enemy.patrolPoints.Count == 0) return;
+        if (enemyBase is EnemyController enemy)
+        {
+            if (enemy.PlayerInRange())
+            {
+                enemy.ChangeState(StateType.Chase);
+                return;
+            }
 
-        Transform target = enemy.patrolPoints[currentPoint];
-        enemy.MoveTo(target.position);
+            if (enemy.patrolPoints.Count == 0) return;
 
-        if (Vector3.Distance(enemy.transform.position, target.position) < 0.5f)
-            currentPoint = (currentPoint + 1) % enemy.patrolPoints.Count;
+            Vector3 target = enemy.patrolPoints[currentPoint].position;
+            enemy.MoveTo(target);
 
-        if (enemy.PlayerInRange())
-        { 
-            enemy.GetStateMachine().ChangeState(StateType.Chase);
+            if (Vector3.Distance(enemy.transform.position, target) < 0.5f)
+                currentPoint = (currentPoint + 1) % enemy.patrolPoints.Count;
+        }
+
+        else if (enemyBase is RangedEnemyController rangedEnemy)
+        {
+            if (rangedEnemy.PlayerInRange())
+            {
+                rangedEnemy.ChangeState(StateType.Attack);
+                return;
+            }
         }
     }
 
