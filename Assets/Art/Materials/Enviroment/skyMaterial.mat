@@ -76,7 +76,7 @@ Material:
     - _Parallax: 0.02
     - _SrcBlend: 1
     - _SunDisk: 2
-    - _SunSize: 0.123
+    - _SunSize: 0
     - _SunSizeConvergence: 5
     - _UVSec: 0
     - _ZWrite: 1

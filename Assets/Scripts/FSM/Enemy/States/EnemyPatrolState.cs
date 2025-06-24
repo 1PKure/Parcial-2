@@ -1,14 +1,15 @@
-using Clase10;
 using UnityEngine;
 
 public class EnemyPatrolState : State
 {
+    public override StateType StateType => StateType.Patrol;
+
     private EnemyController enemy;
     private int currentPoint = 0;
 
-    public EnemyPatrolState(EnemyController enemyController)
+    public EnemyPatrolState(EnemyController enemy) : base(enemy.gameObject, enemy.GetStateMachine())
     {
-        enemy = enemyController;
+        this.enemy = enemy;
     }
 
     public override void Enter() { }
@@ -24,7 +25,9 @@ public class EnemyPatrolState : State
             currentPoint = (currentPoint + 1) % enemy.patrolPoints.Count;
 
         if (enemy.PlayerInRange())
-            enemy.ChangeState(new EnemyChaseState(enemy));
+        { 
+            enemy.GetStateMachine().ChangeState(StateType.Chase);
+        }
     }
 
     public override void Exit() { }

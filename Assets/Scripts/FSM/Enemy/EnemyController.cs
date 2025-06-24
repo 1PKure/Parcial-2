@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Clase10;
 
 public class EnemyController : MonoBehaviour
 {
@@ -15,19 +14,22 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         stateMachine = new StateMachine();
-        stateMachine.ChangeState(new EnemyPatrolState(this));
+
+        stateMachine.AddState(new EnemyIdleState(this));
+        stateMachine.AddState(new EnemyPatrolState(this));
+        stateMachine.AddState(new EnemyChaseState(this));
+        stateMachine.AddState(new EnemyAttackState(this));
+        stateMachine.AddState(new EnemyDeadState(this));
+
+        stateMachine.ChangeState(StateType.Patrol);
     }
 
     private void Update()
     {
         stateMachine.Update();
     }
-    public StateMachine GetStateMachine()
-    {
-        return stateMachine;
-    }
-
-    public void ChangeState(State newState) => stateMachine.ChangeState(newState);
+    public StateMachine GetStateMachine() => stateMachine;
+    public void ChangeState(StateType type) => stateMachine.ChangeState(type);
 
     public bool PlayerInRange()
     {

@@ -1,20 +1,16 @@
-using Clase10;
 
 public class EnemyDeadState : State
 {
+    public override StateType StateType => StateType.Dead;
+
     private EnemyController enemy;
 
-    public EnemyDeadState(EnemyController enemyController)
+    public EnemyDeadState(EnemyController enemy) : base(enemy.gameObject, enemy.GetStateMachine())
     {
-        enemy = enemyController;
+        this.enemy = enemy;
     }
 
-    public override void Enter()
-    {
-        // Lógica al morir
-    }
-
+    public override void Enter() { }
     public override void Update() { }
-
     public override void Exit() { }
 }

@@ -1,4 +1,3 @@
-using Clase10;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour

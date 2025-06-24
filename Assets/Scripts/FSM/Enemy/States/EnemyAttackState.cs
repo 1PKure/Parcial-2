@@ -1,38 +1,38 @@
-using Clase10;
 using UnityEngine;
 
 public class EnemyAttackState : State
 {
+    public override StateType StateType => StateType.Attack;
+
     private EnemyController enemy;
     private float attackCooldown = 1.5f;
     private float lastAttackTime = 0;
     private PlayerHealth playerHealth;
 
-    public EnemyAttackState(EnemyController enemyController)
+    public EnemyAttackState(EnemyController enemy) : base(enemy.gameObject, enemy.GetStateMachine())
     {
-        enemy = enemyController;
+        this.enemy = enemy;
         if (enemy.player != null)
             playerHealth = enemy.player.GetComponent<PlayerHealth>();
     }
 
-    public override void Enter() { lastAttackTime = Time.time - attackCooldown; }
+    public override void Enter()
+    {
+        lastAttackTime = Time.time - attackCooldown;
+    }
 
     public override void Update()
     {
         if (!enemy.PlayerInRange())
         {
-            enemy.ChangeState(new EnemyPatrolState(enemy));
+            enemy.GetStateMachine().ChangeState(StateType.Chase);
             return;
         }
 
         if (Time.time >= lastAttackTime + attackCooldown)
         {
-            Debug.Log("Enemy attacks player!");
             lastAttackTime = Time.time;
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(10);
-            }
+            playerHealth?.TakeDamage(10);
         }
     }
 

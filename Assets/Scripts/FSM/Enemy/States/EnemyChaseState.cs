@@ -1,13 +1,14 @@
-using Clase10;
 using UnityEngine;
 
 public class EnemyChaseState : State
 {
+    public override StateType StateType => StateType.Chase;
+
     private EnemyController enemy;
 
-    public EnemyChaseState(EnemyController enemyController)
+    public EnemyChaseState(EnemyController enemy) : base(enemy.gameObject, enemy.GetStateMachine())
     {
-        enemy = enemyController;
+        this.enemy = enemy;
     }
 
     public override void Enter() { }
@@ -18,7 +19,7 @@ public class EnemyChaseState : State
         {
             if (enemy.PlayerTooFar())
             {
-                enemy.ChangeState(new EnemyPatrolState(enemy));
+                enemy.GetStateMachine().ChangeState(StateType.Patrol);
                 return;
             }
         }
@@ -26,9 +27,7 @@ public class EnemyChaseState : State
         enemy.MoveTo(enemy.player.position);
 
         if (Vector3.Distance(enemy.transform.position, enemy.player.position) < 1.5f)
-        {
-            enemy.ChangeState(new EnemyAttackState(enemy));
-        }
+            enemy.GetStateMachine().ChangeState(StateType.Attack);
     }
 
     public override void Exit() { }

@@ -1,23 +1,26 @@
+using System.Collections.Generic;
 
-    public class StateMachine
+public class StateMachine
+{
+    private State currentState;
+    private List<State> states = new List<State>();
+
+    public void AddState(State state)
     {
-        private State currentState;
-
-        public void Initialize(State startingState)
-        {
-            currentState = startingState;
-            currentState.Enter();
-        }
-
-        public void ChangeState(State newState)
-        {
-            currentState?.Exit();
-            currentState = newState;
-            currentState.Enter();
-        }
-
-        public void Update()
-        {
-            currentState?.Update();
-        }
+        states.Add(state);
     }
+
+    public void ChangeState(StateType type)
+    {
+        currentState?.Exit();
+
+        currentState = states.Find(s => s.StateType == type);
+        currentState?.Enter();
+    }
+
+    public void Update()
+    {
+        currentState?.Update();
+    }
+}
+

@@ -1,5 +1,4 @@
 using UnityEngine;
-using Clase10;
 
 public class PlayerBody : MonoBehaviour, IPossessable
 {

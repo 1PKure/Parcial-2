@@ -1,31 +1,28 @@
 using UnityEngine;
 
-    public class PlayerIdleState : State
+public class PlayerIdleState : State
+{
+    public override StateType StateType => StateType.Idle;
+
+    private PlayerController2 player;
+
+    public PlayerIdleState(PlayerController2 player) : base(player.gameObject, player.GetStateMachine())
     {
-        private PlayerController2 player;
+        this.player = player;
+    }
 
-        public PlayerIdleState(PlayerController2 player)
+    public override void Enter() { }
+
+    public override void Update()
+    {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        Vector3 dir = player.GetInputDirection();
+        if (dir.magnitude > 0.1f)
         {
-            this.player = player;
-        }
-
-        public override void Enter()
-        {
-            Debug.Log("Entered Idle State");
-        }
-
-        public override void Update()
-        {
-            Vector3 inputDir = player.GetInputDirection();
-
-            if (inputDir.magnitude > 0.1f)
-            {
-                player.ChangeState(new PlayerMoveState(player));
-            }
-        }
-
-        public override void Exit()
-        {
-            Debug.Log("Exited Idle State");
+            player.ChangeState(StateType.Move);
         }
     }
+
+    public override void Exit() { }
+}

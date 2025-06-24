@@ -1,29 +1,28 @@
 using UnityEngine;
 
-namespace Clase10
+public class PlayerPossessedState : State
 {
-    public class PlayerPossessedState : State
+    public override StateType StateType => StateType.Possessed;
+
+    private PlayerController2 player;
+
+    public PlayerPossessedState(PlayerController2 player) : base(player.gameObject, player.GetStateMachine())
     {
-        private PlayerController2 player;
+        this.player = player;
+    }
 
-        public PlayerPossessedState(PlayerController2 player)
-        {
-            this.player = player;
-        }
+    public override void Enter()
+    {
+        Debug.Log("Entered Possessed State ? Player inerte");
+    }
 
-        public override void Enter()
-        {
-            Debug.Log("Entered Possessed State ? Player inerte");
-        }
+    public override void Update()
+    {
+        // No hace nada ? Player queda inerte
+    }
 
-        public override void Update()
-        {
-            // No hace nada ? Player queda inerte
-        }
-
-        public override void Exit()
-        {
-            Debug.Log("Exited Possessed State ? Player vuelve a funcionar");
-        }
+    public override void Exit()
+    {
+        Debug.Log("Exited Possessed State ? Player vuelve a funcionar");
     }
 }
