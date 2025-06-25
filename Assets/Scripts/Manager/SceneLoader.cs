@@ -27,7 +27,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (loadingScreen == null || fakeLoadingBar == null)
         {
-            Debug.LogError("SceneLoader: loadingScreen o fakeLoadingBar no están asignados.");
+            UIManager.Instance.ShowMessage("SceneLoader: loadingScreen o fakeLoadingBar no están asignados.");
             return;
         }
         StartCoroutine(LoadSceneWithFakeBar(sceneName));

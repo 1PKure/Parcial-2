@@ -13,7 +13,7 @@ public class PlayerPossessedState : State
 
     public override void Enter()
     {
-        Debug.Log("Entered Possessed State ? Player inerte");
+        UIManager.Instance.ShowMessage("Entered Possessed State ? Player inerte");
     }
 
     public override void Update()
@@ -23,6 +23,6 @@ public class PlayerPossessedState : State
 
     public override void Exit()
     {
-        Debug.Log("Exited Possessed State ? Player vuelve a funcionar");
+        UIManager.Instance.ShowMessage("Exited Possessed State ? Player vuelve a funcionar");
     }
 }

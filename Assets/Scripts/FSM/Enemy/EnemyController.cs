@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
         stateMachine = new StateMachine();
 
         stateMachine.AddState(new EnemyIdleState(this));
-        stateMachine.AddState(new EnemyPatrolState(this));
+        stateMachine.AddState(new EnemyPatrolState(this, stateMachine));
         stateMachine.AddState(new EnemyChaseState(this));
         stateMachine.AddState(new EnemyAttackState(this));
         stateMachine.AddState(new EnemyDeadState(this));

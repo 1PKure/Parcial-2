@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    private void Start()
+    {
+        UIManager.Instance.SetTotalStones(totalStones);
+    }
 
     public void LoadScene(string targetScene)
     {
@@ -33,7 +37,8 @@ public class GameManager : MonoBehaviour
     public void AddMagicStone()
     {
         collectedStones++;
-        Debug.Log($"Piedras recolectadas: {collectedStones}/{totalStones}");
+        UIManager.Instance.ShowMessage($"Piedras recolectadas: {collectedStones}/{totalStones}");
+        UIManager.Instance.UpdateStoneUI(collectedStones);
 
         if (collectedStones >= totalStones)
         {
@@ -43,11 +48,14 @@ public class GameManager : MonoBehaviour
 
     private void UnlockRock()
     {
-        Debug.Log("¡Piedras completas! Roca desbloqueada.");
+        UIManager.Instance.ShowMessage("¡Piedras completas! Roca desbloqueada.");
         if (specialRock != null)
-            specialRock.SetActive(false); // o animación, partículas, etc.
+            specialRock.SetActive(false);
     }
-
+    public bool HasAllStones()
+    {
+        return collectedStones >= totalStones;
+    }
     public void ResetStones()
     {
         collectedStones = 0;

@@ -11,7 +11,14 @@ public class SpecialRock : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            SceneLoader.Instance.LoadSceneWithFakeLoading(nextSceneName);
+            if (GameManager.Instance.HasAllStones())
+            {
+                SceneLoader.Instance.LoadSceneWithFakeLoading(nextSceneName);
+            }
+            else
+            {
+                UIManager.Instance.ShowMessage("Aún te faltan piedras mágicas.");
+            }
         }
     }
 }

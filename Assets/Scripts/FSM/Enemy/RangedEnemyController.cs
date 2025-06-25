@@ -17,7 +17,7 @@ public class RangedEnemyController : MonoBehaviour
     {
         stateMachine = new StateMachine();
 
-        stateMachine.AddState(new EnemyPatrolState(this));
+        stateMachine.AddState(new EnemyPatrolState(this, stateMachine));
         stateMachine.AddState(new EnemyRangedAttackState(this));
         stateMachine.ChangeState(StateType.Patrol);
     }

@@ -6,32 +6,33 @@ public class EnemyPatrolState : State
 
     private MonoBehaviour enemyBase;
     private int currentPoint = 0;
+    private WizardEnemyController rangedEnemy;
 
-    public EnemyPatrolState(MonoBehaviour enemy)
-        : base(enemy.gameObject, enemy.GetComponent<StateMachine>())
+    public EnemyPatrolState(MonoBehaviour enemy, StateMachine sm)
+        : base(enemy.gameObject, sm)
     {
-        enemyBase = enemy;
+        this.enemyBase = enemy;
     }
 
     public override void Enter() { }
 
     public override void Update()
     {
-        if (enemyBase is EnemyController enemy)
+        if (enemyBase is EnemyController meleeEnemy)
         {
-            if (enemy.PlayerInRange())
+            if (meleeEnemy.PlayerInRange())
             {
-                enemy.ChangeState(StateType.Chase);
+                meleeEnemy.ChangeState(StateType.Chase);
                 return;
             }
 
-            if (enemy.patrolPoints.Count == 0) return;
+            if (meleeEnemy.patrolPoints.Count == 0) return;
 
-            Vector3 target = enemy.patrolPoints[currentPoint].position;
-            enemy.MoveTo(target);
+            Vector3 target = meleeEnemy.patrolPoints[currentPoint].position;
+            meleeEnemy.MoveTo(target);
 
-            if (Vector3.Distance(enemy.transform.position, target) < 0.5f)
-                currentPoint = (currentPoint + 1) % enemy.patrolPoints.Count;
+            if (Vector3.Distance(meleeEnemy.transform.position, target) < 0.5f)
+                currentPoint = (currentPoint + 1) % meleeEnemy.patrolPoints.Count;
         }
 
         else if (enemyBase is RangedEnemyController rangedEnemy)
@@ -41,8 +42,15 @@ public class EnemyPatrolState : State
                 rangedEnemy.ChangeState(StateType.Attack);
                 return;
             }
+
+            if (rangedEnemy is WizardEnemyController wizard)
+                wizard.SetSpeed(1f);
         }
     }
 
-    public override void Exit() { }
+    public override void Exit() 
+    {
+        if (rangedEnemy is WizardEnemyController wizard)
+            wizard.SetSpeed(0f);
+    }
 }

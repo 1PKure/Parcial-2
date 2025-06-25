@@ -27,15 +27,15 @@ public class PlayerController2 : MonoBehaviour
     private bool isGrounded;
     private Rigidbody rb;
     private bool isMoving = false;
-    private float jumpHeight = 2f;
+    private float jumpHeight = 5f;
     private float gravity = -9.81f;
     private float groundDistance = 0.4f;
     // FSM
     private StateMachine stateMachine;
-    private float mouseSensitivity = 100f;
+    private float mouseSensitivity = 120f;
     private float rotationY = 0f;
     private float rotationX = 0f;
-    private float maxAngle = 30f;
+    private float maxAngle = 40f;
     private bool JumpPressed => Input.GetKeyDown(KeyCode.Space);
     private void Awake()
     {
@@ -59,7 +59,6 @@ public class PlayerController2 : MonoBehaviour
         HandleRotation();
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Debug.Log("C key pressed, toggling camera view.");
             isFirstPerson = !isFirstPerson;
 
             cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;

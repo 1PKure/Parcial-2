@@ -10,7 +10,7 @@ public class PressurePlate : MonoBehaviour
         Rigidbody rb = other.attachedRigidbody;
         if (rb != null && rb.mass >= requiredMass)
         {
-            Debug.Log("Plataforma activada");
+            UIManager.Instance.ShowMessage("Plataforma activada");
             puerta.SetActive(false);
         }
     }
@@ -20,7 +20,7 @@ public class PressurePlate : MonoBehaviour
         Rigidbody rb = other.attachedRigidbody;
         if (rb != null && rb.mass >= requiredMass)
         {
-            Debug.Log("Plataforma desactivada");
+            UIManager.Instance.ShowMessage("Plataforma desactivada");
             puerta.SetActive(true);
         }
     }

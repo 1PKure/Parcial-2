@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: 7322386518387884174}
   - component: {fileID: 6202503438135348651}
   - component: {fileID: 6817036475439311204}
+  - component: {fileID: 3467945048833457171}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -158,7 +159,11 @@ MonoBehaviour:
   pivot: {fileID: 8958932713340094154}
   cameraTransform: {fileID: 6658141186571258479}
   maxAngleMovement: 30
-  moveSpeed: 5
+  moveSpeed: 10
+  groundCheck: {fileID: 1905290505490729808}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
   audioSource: {fileID: 0}
   clips: []
   maxTimeAudio: 0.7
@@ -224,9 +229,28 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!114 &3467945048833457171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5202777633972941435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62a09da07735c44ab8fad60a83d0604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheck: {fileID: 1905290505490729808}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  groundDistance: 0.4
+  fallThreshold: -10
+  fallDamage: 20
 --- !u!1 &6564500593861237686
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,7 +276,7 @@ Transform:
   m_GameObject: {fileID: 6564500593861237686}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.016, y: -0.444, z: 0}
+  m_LocalPosition: {x: -0.004, y: -0.332, z: -0.091}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,7 +392,7 @@ Transform:
   m_GameObject: {fileID: 7094183354819630681}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.245}
+  m_LocalPosition: {x: -0, y: -0.11, z: 0.205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

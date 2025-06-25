@@ -4,19 +4,21 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
-    private int currentHealth;
+    public float maxHealth = 100;
+    private float currentHealth;
     [SerializeField] private Image healthBar;
 
     private void Start()
     {
         currentHealth = maxHealth;
+        UIManager.Instance.UpdateHealthUI(currentHealth, maxHealth);
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
         currentHealth -= amount;
-        Debug.Log("Player health: " + currentHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        UIManager.Instance.UpdateHealthUI(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
         {
@@ -26,7 +28,6 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Player died.");
         RestartGame();
     }
 
@@ -35,5 +36,5 @@ public class PlayerHealth : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public int GetHealth() => currentHealth;
+    public float GetHealth() => currentHealth;
 }
