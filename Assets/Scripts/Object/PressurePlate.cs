@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-    public GameObject puerta;
+    [SerializeField] private GameObject door;
     public float requiredMass = 3f;
+    [Header("Feedback Visual")]
+    [SerializeField] private Renderer plateRenderer; 
+    [SerializeField] private Color colorActivated = Color.green;
+    [SerializeField] private Color colorDeactivated = Color.red;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -11,7 +15,8 @@ public class PressurePlate : MonoBehaviour
         if (rb != null && rb.mass >= requiredMass)
         {
             UIManager.Instance.ShowMessage("Plataforma activada");
-            puerta.SetActive(false);
+            door.SetActive(false);
+            
         }
     }
 
@@ -21,7 +26,15 @@ public class PressurePlate : MonoBehaviour
         if (rb != null && rb.mass >= requiredMass)
         {
             UIManager.Instance.ShowMessage("Plataforma desactivada");
-            puerta.SetActive(true);
+            door.SetActive(true);
+        }
+    }
+
+    private void CambiarColor(bool activado)
+    {
+        if (plateRenderer != null)
+        {
+            plateRenderer.material.color = activado ? colorActivated : colorDeactivated;
         }
     }
 }
