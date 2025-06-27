@@ -70,4 +70,13 @@ public class SceneLoader : MonoBehaviour
         if (fakeLoadingBar != null)
             fakeLoadingBar.gameObject.SetActive(false);
     }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }
