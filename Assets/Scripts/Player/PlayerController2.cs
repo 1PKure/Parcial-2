@@ -2,16 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerController2 : MonoBehaviour
+public class PlayerController2 : Person
 {
-    public Transform pivot;
-    public Transform cameraTransform;
-
     [Header("Movement")]
     [SerializeField] private float maxAngleMovement = 30f;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float jumpCooldown = 0.3f;
+
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -22,6 +21,8 @@ public class PlayerController2 : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private Transform firstPersonCameraTransform;
     [SerializeField] private Transform thirdPersonCameraTransform;
+    [SerializeField] private Transform pivot;
+    [SerializeField] private Transform cameraTransform;
 
     private bool isFirstPerson = true;
     private bool isGrounded;
@@ -30,30 +31,25 @@ public class PlayerController2 : MonoBehaviour
     private float jumpHeight = 5f;
     private float gravity = -9.81f;
     private float groundDistance = 0.4f;
+    private float lastJumpTime = -10f;
     // FSM
     private StateMachine stateMachine;
     private float mouseSensitivity = 120f;
     private float rotationY = 0f;
     private float rotationX = 0f;
     private float maxAngle = 40f;
+    private bool initialized = false;
     private bool JumpPressed => Input.GetKeyDown(KeyCode.Space);
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     private void Start()
     {
-        stateMachine = new StateMachine();
-        stateMachine.AddState(new PlayerIdleState(this));
-        stateMachine.AddState(new PlayerMoveState(this));
-        stateMachine.AddState(new PlayerPossessedState(this));
-        stateMachine.ChangeState(StateType.Idle);
-        cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
+        Initialize();
+        initialized = true;
     }
 
     private void Update()
     {
+        if (!initialized) return;
         stateMachine.Update();
         HandleJump();
         HandleRotation();
@@ -99,10 +95,11 @@ public class PlayerController2 : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, -2f, rb.velocity.z);
         }
 
-        if (JumpPressed && isGrounded)
+        if (JumpPressed && isGrounded && Time.time > lastJumpTime + jumpCooldown)
         {
             float jumpForce = Mathf.Sqrt(jumpHeight * -2f * gravity);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            lastJumpTime = Time.time;
         }
 
         rb.velocity += new Vector3(0, gravity * Time.deltaTime, 0);
@@ -126,7 +123,15 @@ public class PlayerController2 : MonoBehaviour
 
     private void PlayAudio()
     {
+        if (!isGrounded) return;
+
+        Vector3 input = GetInputDirection();
+        if (input.magnitude < 0.1f) return;
+
         timeAudio += Time.deltaTime;
+        if (timeAudio < maxTimeAudio) return;
+
+        timeAudio = 0;
 
         Terrain terrain = Terrain.activeTerrain;
         Vector3 pos = GetMapPos();
@@ -148,12 +153,10 @@ public class PlayerController2 : MonoBehaviour
             }
         }
 
-        if (timeAudio > maxTimeAudio)
+        if (index < clips.Count)
         {
-            timeAudio = 0;
-            if (index < clips.Count)
-                audioSource.clip = clips[index];
-            //audioSource.Play();
+            audioSource.clip = clips[index];
+            audioSource.Play();
         }
     }
 
@@ -167,7 +170,6 @@ public class PlayerController2 : MonoBehaviour
                            (pos.z - terrain.transform.position.z) / terrain.terrainData.size.z);
     }
 
-    // Métodos de la FSM
     public void ChangeState(StateType newState)
     {
         stateMachine.ChangeState(newState);
@@ -198,5 +200,35 @@ public class PlayerController2 : MonoBehaviour
     public void SetCameraTarget(Transform newTarget)
     {
         cameraTransform = newTarget;
+    }
+
+    public override void Initialize()
+    {
+        rb = GetComponent<Rigidbody>();
+        stateMachine = new StateMachine();
+        stateMachine.AddState(new PlayerIdleState(this));
+        stateMachine.AddState(new PlayerMoveState(this));
+        stateMachine.AddState(new PlayerPossessedState(this));
+        stateMachine.ChangeState(StateType.Idle);
+        cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
+    }
+
+    public override void EnableControl()
+    {
+        enabled = true;
+        foreach (var comp in GetComponents<MonoBehaviour>())
+            if (comp != this) comp.enabled = true;
+    }
+
+    public override void DisableControl()
+    {
+        enabled = false;
+        foreach (var comp in GetComponents<MonoBehaviour>())
+            if (comp != this) comp.enabled = false;
+    }
+
+    public override Transform GetCameraTarget()
+    {
+        return transform;
     }
 }

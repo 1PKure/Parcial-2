@@ -249,8 +249,8 @@ Transform:
   m_GameObject: {fileID: 3872118036412323201}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.6600002}
-  m_LocalScale: {x: 1, y: 1, z: 1.6000001}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0159}
+  m_LocalScale: {x: 1, y: 1, z: 0.99408007}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8386416488027761907}
@@ -428,6 +428,8 @@ GameObject:
   - component: {fileID: 5332441486912598160}
   - component: {fileID: 6870002869112726429}
   - component: {fileID: 6334785877483789835}
+  - component: {fileID: 3388481504604512053}
+  - component: {fileID: 8773244901312500569}
   m_Layer: 0
   m_Name: FireBall02
   m_TagString: Untagged
@@ -517,6 +519,57 @@ MonoBehaviour:
   movementSpeed: 10
   delayTime: 0
   time: 2
+  towardType: 0
+  maxDistance: 100
+--- !u!54 &3388481504604512053
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7000735478735714895}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 1
+--- !u!64 &8773244901312500569
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7000735478735714895}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6948991058301074398, guid: 4e928170e6cef9d47b212385ad28fac0, type: 3}
 --- !u!1 &8143706055778600731
 GameObject:
   m_ObjectHideFlags: 0

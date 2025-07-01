@@ -3,10 +3,9 @@ using UnityEngine;
 public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
-    private GameObject currentBody;
-    [SerializeField] private PlayerController2 playerController;
-    private Transform originalBody;
-    private Transform cameraHolder;
+    private Person currentBody;
+    private Person originalBody;
+    [SerializeField] private Transform cameraHolder;
     private CameraController cameraController;
     private bool isPossessing = false;
     private StateMachine stateMachine;
@@ -14,12 +13,9 @@ public class GhostController : MonoBehaviour
 
     private void Start()
     {
-        originalBody = GameObject.FindWithTag("Player").transform;
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController2>();
-        originalBody = playerController.transform;
-        cameraHolder = playerController.cameraTransform;
+        originalBody = GameObject.FindWithTag("Player").GetComponent<Person>();
+        originalBody.Initialize();
         cameraController = cameraHolder.GetComponent<CameraController>();
-
     }
     void Update()
     {
@@ -48,39 +44,21 @@ public class GhostController : MonoBehaviour
 
     void Possess(GameObject target)
     {
+        if (!target.TryGetComponent(out Person newBody)) return;
+
         isPossessing = true;
 
-        IPossessable possessable = target.GetComponent<IPossessable>();
-        if (possessable == null) return;
+        originalBody.DisableControl();
 
-        if (originalBody.TryGetComponent(out IPossessable originalPossessable))
-            originalPossessable.OnPossessed();
+        currentBody = newBody;
+        currentBody.Initialize();
+        currentBody.EnableControl();
 
-        playerController.enabled = false;
-        foreach (var component in originalBody.GetComponents<MonoBehaviour>())
-        {
-            if (component != this)
-                component.enabled = false;
-        }
-
-        currentBody = target;
-
-        if (currentBody.TryGetComponent(out IPossessable newPossessed))
-            newPossessed.OnPossessed();
-
-        currentBody.AddComponent<PlayerPossessedController>();
-
-
-        cameraHolder.SetParent(currentBody.transform);
+        cameraHolder.SetParent(currentBody.GetCameraTarget());
         cameraHolder.localPosition = Vector3.zero;
         cameraHolder.localRotation = Quaternion.identity;
 
- 
-        cameraController.SetTarget(currentBody.transform);
-        playerController.SetCameraTarget(currentBody.transform);
-
-
-        playerController.ChangeState(StateType.Possessed);
+        cameraController.SetTarget(currentBody.GetCameraTarget());
     }
 
 
@@ -88,34 +66,17 @@ public class GhostController : MonoBehaviour
     {
         if (currentBody != null)
         {
-            if (currentBody.TryGetComponent(out IPossessable possessed))
-                possessed.OnReleased();
-
-            var possessedController = currentBody.GetComponent<PlayerPossessedController>();
-            if (possessedController != null)
-                Destroy(possessedController);
-
+            currentBody.DisableControl();
             currentBody = null;
             isPossessing = false;
 
-            if (originalBody.TryGetComponent(out IPossessable originalPossessable))
-                originalPossessable.OnReleased();
+            originalBody.EnableControl();
 
-            playerController.enabled = true;
-            foreach (var component in originalBody.GetComponents<MonoBehaviour>())
-            {
-                component.enabled = true;
-            }
-
-            cameraHolder.SetParent(originalBody);
+            cameraHolder.SetParent(originalBody.GetCameraTarget());
             cameraHolder.localPosition = Vector3.zero;
             cameraHolder.localRotation = Quaternion.identity;
 
-            playerController.SetCameraTarget(originalBody);
-            cameraController.SetTarget(originalBody);
-
-
-            playerController.ChangeState(StateType.Idle);
+            cameraController.SetTarget(originalBody.GetCameraTarget());
         }
     }
 

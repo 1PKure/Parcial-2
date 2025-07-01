@@ -1,55 +1,103 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private GameObject mainPanel;
+    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject creditsPanel;
+
+    [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider sfxSlider;
+
+    [SerializeField] private AudioMixer audioMixer;
+
     private bool isPaused = false;
     private PlayerController2 playerController;
 
-    void Start()
+    private void Start()
     {
-        pausePanel.SetActive(false);
+
         playerController = FindObjectOfType<PlayerController2>();
+        float masterVol;
+        audioMixer.GetFloat("MasterVolume", out masterVol);
+        masterSlider.value = Mathf.Pow(10, masterVol / 20f);
+
+        float sfxVol;
+        audioMixer.GetFloat("SFXVolume", out sfxVol);
+        sfxSlider.value = Mathf.Pow(10, sfxVol / 20f);
     }
-    void Update()
+
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            if (!isPaused)
+                OpenPauseMenu();
+            else
+                CloseAllPanels();
         }
     }
 
-    public void TogglePause()
+    public void OpenPauseMenu()
     {
-        mainPanel.SetActive(!isPaused);
-        isPaused = !isPaused;
-        pausePanel.SetActive(isPaused);
-        Time.timeScale = isPaused ? 0f : 1f;
-        Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
-        if (playerController != null)
-            playerController.enabled = !isPaused;
+        isPaused = true;
+        pausePanel.SetActive(true);
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        if (playerController != null) playerController.enabled = false;
     }
 
-    public void GoToMainMenu()
+    public void CloseAllPanels()
     {
+        isPaused = false;
+        pausePanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        Cursor.lockState = CursorLockMode.Locked;
+        if (playerController != null) playerController.enabled = true;
     }
 
-    public void GoToCredits()
+    public void OpenSettings()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("Credits");
+        pausePanel.SetActive(false);
+        settingsPanel.SetActive(true);
+    }
+
+    public void OpenCredits()
+    {
+        pausePanel.SetActive(false);
+        creditsPanel.SetActive(true);
+    }
+
+    public void BackToPause()
+    {
+        settingsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
+        pausePanel.SetActive(true);
     }
 
     public void QuitGame()
     {
-        Application.Quit();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
 #endif
+    }
+
+    public void SetMasterVolume()
+    {
+        float volume = masterSlider.value;
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
+    }
+
+    public void SetSFXVolume()
+    {
+        float volume = sfxSlider.value;
+        audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20);
     }
 }

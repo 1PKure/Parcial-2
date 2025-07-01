@@ -1,31 +1,25 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : Person
 {
     public List<Transform> patrolPoints;
     public float speed = 2f;
     public float detectionRange = 5f;
     public float maxChaseDistance = 10f;
     public Transform player;
+    private bool initialized = false;
 
     private StateMachine stateMachine;
 
     private void Start()
     {
-        stateMachine = new StateMachine();
-
-        stateMachine.AddState(new EnemyIdleState(this));
-        stateMachine.AddState(new EnemyPatrolState(this, stateMachine));
-        stateMachine.AddState(new EnemyChaseState(this));
-        stateMachine.AddState(new EnemyAttackState(this));
-        stateMachine.AddState(new EnemyDeadState(this));
-
-        stateMachine.ChangeState(StateType.Patrol);
+        Initialize();
+        initialized = true;
     }
-
     private void Update()
     {
+        if (!initialized) return;
         stateMachine.Update();
     }
     public StateMachine GetStateMachine() => stateMachine;
@@ -47,5 +41,37 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null) return true;
         return Vector3.Distance(transform.position, player.position) > maxChaseDistance;
+    }
+
+    public override void Initialize()
+    {
+        stateMachine = new StateMachine();
+
+        stateMachine.AddState(new EnemyIdleState(this));
+        stateMachine.AddState(new EnemyPatrolState(this, stateMachine));
+        stateMachine.AddState(new EnemyChaseState(this));
+        stateMachine.AddState(new EnemyAttackState(this));
+        stateMachine.AddState(new EnemyDeadState(this));
+
+        stateMachine.ChangeState(StateType.Patrol);
+    }
+
+    public override void EnableControl()
+    {
+        enabled = true;
+        foreach (var comp in GetComponents<MonoBehaviour>())
+            if (comp != this) comp.enabled = true;
+    }
+
+    public override void DisableControl()
+    {
+        enabled = false;
+        foreach (var comp in GetComponents<MonoBehaviour>())
+            if (comp != this) comp.enabled = false;
+    }
+
+    public override Transform GetCameraTarget()
+    {
+        return transform; // Si no hay cámara asociada, se devuelve el propio transform
     }
 }
