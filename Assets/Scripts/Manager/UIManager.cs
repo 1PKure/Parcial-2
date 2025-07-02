@@ -25,6 +25,11 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        SetTotalStones(GameManager.Instance.totalStones);
+    }
+
     public void SetTotalStones(int amount)
     {
         totalStones = amount;

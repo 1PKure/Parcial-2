@@ -20,18 +20,10 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    private void Start()
-    {
-        UIManager.Instance.SetTotalStones(totalStones);
-    }
 
     public void LoadScene(string targetScene)
     {
         SceneLoader.Instance.LoadSceneWithFakeLoading(targetScene);
-    }
-    public void OnStartGame()
-    {
-        GameManager.Instance.LoadScene("Gameplay");
     }
 
     public void AddMagicStone()
