@@ -51,6 +51,7 @@ public class PlayerController2 : Person
     private void Update()
     {
         if (!initialized) return;
+        Cursor.lockState = CursorLockMode.Locked;
         stateMachine.Update();
         HandleJump();
         HandleRotation();
