@@ -13,7 +13,8 @@ public class PlayerController2 : Person
 
 
     [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource audioSourceMusic;
+    [SerializeField] private AudioSource audioSourceSteps;
     [SerializeField] private List<AudioClip> clips = new List<AudioClip>();
     [SerializeField] float maxTimeAudio = 0.7f;
     [SerializeField] float timeAudio = 0;
@@ -155,8 +156,8 @@ public class PlayerController2 : Person
 
         if (index < clips.Count)
         {
-            audioSource.clip = clips[index];
-            audioSource.Play();
+            audioSourceSteps.clip = clips[index];
+            audioSourceSteps.Play();
         }
     }
 
@@ -230,5 +231,23 @@ public class PlayerController2 : Person
     public override Transform GetCameraTarget()
     {
         return transform;
+    }
+
+    public void SetupFromTemplate(PlayerController2 template)
+    {
+        this.pivot = template.pivot;
+        this.cameraTransform = template.cameraTransform;
+        this.firstPersonCameraTransform = template.firstPersonCameraTransform;
+        this.thirdPersonCameraTransform = template.thirdPersonCameraTransform;
+
+        this.maxAngleMovement = template.maxAngleMovement;
+        this.moveSpeed = template.moveSpeed;
+        this.groundCheck = template.groundCheck;
+        this.groundMask = template.groundMask;
+
+        this.audioSourceSteps = template.audioSourceSteps;
+        this.audioSourceMusic = template.audioSourceMusic;
+        this.clips = new List<AudioClip>(template.clips);
+        this.maxTimeAudio = template.maxTimeAudio;
     }
 }

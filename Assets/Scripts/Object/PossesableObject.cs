@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class PossessableObject : MonoBehaviour, IPossessable
+public class PossessableObject : Person, IPossessable
 {
     private Renderer rend;
 
@@ -22,5 +22,26 @@ public class PossessableObject : MonoBehaviour, IPossessable
     {
         if (rend != null)
             rend.material.color = Color.white;
+    }
+
+    public override void Initialize()
+    {
+        Debug.Log("Inicializado");
+    }
+
+    public override void EnableControl()
+    {
+
+        enabled = true;
+    }
+
+    public override void DisableControl()
+    {
+        enabled = false;
+    }
+
+    public override Transform GetCameraTarget()
+    {
+        return transform;
     }
 }

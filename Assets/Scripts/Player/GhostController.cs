@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
+    [SerializeField] private PlayerController2 playerControllerTemplate;
     private Person currentBody;
     private Person originalBody;
     [SerializeField] private Transform cameraHolder;
@@ -44,7 +46,11 @@ public class GhostController : MonoBehaviour
 
     void Possess(GameObject target)
     {
-        if (!target.TryGetComponent(out Person newBody)) return;
+        if (!target.TryGetComponent(out Person newBody))
+        {
+            var newController = target.AddComponent<PlayerController2>();
+            newController.SetupFromTemplate(playerControllerTemplate);
+        }
 
         isPossessing = true;
 
