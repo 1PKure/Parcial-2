@@ -1,31 +1,30 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour
 {
     [SerializeField] private float possessionRange = 5f;
-    [SerializeField] private PlayerController2 playerControllerTemplate;
-    private Person currentBody;
-    private Person originalBody;
-    [SerializeField] private Transform cameraHolder;
+    private GameObject currentBody;
+    [SerializeField] private PlayerController2 playerController;
+    private Transform originalBody;
+    private Transform cameraHolder;
     private CameraController cameraController;
     private bool isPossessing = false;
-    private StateMachine stateMachine;
-
 
     private void Start()
     {
-        originalBody = GameObject.FindWithTag("Player").GetComponent<Person>();
-        originalBody.Initialize();
+        originalBody = GameObject.FindWithTag("Player").transform;
+        playerController = originalBody.GetComponent<PlayerController2>();
+        cameraHolder = playerController.cameraTransform;
         cameraController = cameraHolder.GetComponent<CameraController>();
     }
-    void Update()
+
+    private void Update()
     {
         if (!isPossessing && Input.GetKeyDown(KeyCode.E))
         {
             TryPossess();
         }
-        else if (isPossessing && Input.GetKeyDown(KeyCode.Q) && currentBody != null)
+        else if (isPossessing && Input.GetKeyDown(KeyCode.Q))
         {
             Release();
         }
@@ -33,7 +32,6 @@ public class GhostController : MonoBehaviour
 
     void TryPossess()
     {
-
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, possessionRange))
         {
@@ -46,44 +44,54 @@ public class GhostController : MonoBehaviour
 
     void Possess(GameObject target)
     {
-        if (!target.TryGetComponent(out Person newBody))
+        isPossessing = true;
+        playerController.IsPossessed = true;
+        playerController.enabled = false;
+        foreach (var comp in originalBody.GetComponents<MonoBehaviour>())
         {
-            var newController = target.AddComponent<PlayerController2>();
-            newController.SetupFromTemplate(playerControllerTemplate);
+            if (comp != this)
+                comp.enabled = false;
         }
 
-        isPossessing = true;
+        currentBody = target;
 
-        originalBody.DisableControl();
+        if (!currentBody.TryGetComponent(out PlayerPossessedController _))
+        {
+            currentBody.AddComponent<PlayerPossessedController>();
+        }
 
-        currentBody = newBody;
-        currentBody.Initialize();
-        currentBody.EnableControl();
-
-        cameraHolder.SetParent(currentBody.GetCameraTarget());
+        cameraHolder.SetParent(currentBody.transform);
         cameraHolder.localPosition = Vector3.zero;
         cameraHolder.localRotation = Quaternion.identity;
 
-        cameraController.SetTarget(currentBody.GetCameraTarget());
+        cameraController.SetTarget(currentBody.transform);
+        playerController.SetCameraTarget(currentBody.transform);
     }
-
 
     void Release()
     {
         if (currentBody != null)
         {
-            currentBody.DisableControl();
+            var possessedController = currentBody.GetComponent<PlayerPossessedController>();
+            if (possessedController != null)
+                Destroy(possessedController);
+
             currentBody = null;
-            isPossessing = false;
-
-            originalBody.EnableControl();
-
-            cameraHolder.SetParent(originalBody.GetCameraTarget());
-            cameraHolder.localPosition = Vector3.zero;
-            cameraHolder.localRotation = Quaternion.identity;
-
-            cameraController.SetTarget(originalBody.GetCameraTarget());
         }
-    }
 
+        isPossessing = false;
+        playerController.IsPossessed = false;
+        foreach (var comp in originalBody.GetComponents<MonoBehaviour>())
+        {
+            comp.enabled = true;
+        }
+
+        cameraHolder.SetParent(originalBody);
+        cameraHolder.localPosition = Vector3.zero;
+        cameraHolder.localRotation = Quaternion.identity;
+
+        cameraController.SetTarget(originalBody);
+        playerController.ResetCamera();
+        playerController.SetCameraTarget(originalBody);
+    }
 }

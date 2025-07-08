@@ -23,7 +23,7 @@ public class PlayerController2 : Person
     [SerializeField] private Transform firstPersonCameraTransform;
     [SerializeField] private Transform thirdPersonCameraTransform;
     [SerializeField] private Transform pivot;
-    [SerializeField] private Transform cameraTransform;
+    [SerializeField] public Transform cameraTransform;
 
     private bool isFirstPerson = true;
     private bool isGrounded;
@@ -41,7 +41,7 @@ public class PlayerController2 : Person
     private float maxAngle = 40f;
     private bool initialized = false;
     private bool JumpPressed => Input.GetKeyDown(KeyCode.Space);
-
+    public bool IsPossessed { get; set; }
     private void Start()
     {
         Initialize();
@@ -73,7 +73,10 @@ public class PlayerController2 : Person
             rb.velocity = velocity;
         }
     }
-
+    public void ResetCamera()
+    {
+        cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
+    }
     private void HandleRotation()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;

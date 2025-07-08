@@ -10,7 +10,6 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Slider fakeLoadingBar;
     [SerializeField] private float fakeDuration = 3f;
-    [SerializeField] private Canvas Canvas;
 
     private void Awake()
     {
@@ -37,7 +36,6 @@ public class SceneLoader : MonoBehaviour
     {
         loadingScreen.SetActive(true);
         fakeLoadingBar.gameObject.SetActive(true);
-        Canvas.enabled = false;
         fakeLoadingBar.value = 0;
 
         AsyncOperation realLoad = SceneManager.LoadSceneAsync(sceneName);

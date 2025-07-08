@@ -6,7 +6,7 @@ public class RangedEnemyController : MonoBehaviour
 {
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private float attackCooldown = 3f;
     [SerializeField] private float detectionRange = 10f;
     [SerializeField] private Transform player;
 

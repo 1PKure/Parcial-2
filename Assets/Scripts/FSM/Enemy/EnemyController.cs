@@ -9,11 +9,17 @@ public class EnemyController : Person
     public float maxChaseDistance = 10f;
     public Transform player;
     private bool initialized = false;
+    private Rigidbody rb;
 
+    [Header("Terreno")]
+    [SerializeField] private LayerMask groundMask = default;
+    [SerializeField] private float heightOffset = 0.5f;
     private StateMachine stateMachine;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        AdjustToGround();
         Initialize();
         initialized = true;
     }
@@ -22,25 +28,52 @@ public class EnemyController : Person
         if (!initialized) return;
         stateMachine.Update();
     }
+    private void AdjustToGround()
+    {
+        Vector3 origin = transform.position + Vector3.up;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 5f, groundMask))
+        {
+            Vector3 pos = transform.position;
+            pos.y = hit.point.y + heightOffset;
+            transform.position = pos;
+        }
+    }
     public StateMachine GetStateMachine() => stateMachine;
     public void ChangeState(StateType type) => stateMachine.ChangeState(type);
 
     public bool PlayerInRange()
     {
-        if (player == null) return false;
+        if (player.TryGetComponent<PlayerController2>(out var pc) && pc.IsPossessed)
+            return false;
         return Vector3.Distance(transform.position, player.position) < detectionRange;
-    }
-
-    public void MoveTo(Vector3 target)
-    {
-        Vector3 dir = (target - transform.position).normalized;
-        transform.position += dir * speed * Time.deltaTime;
     }
 
     public bool PlayerTooFar()
     {
-        if (player == null) return true;
+        if (player.TryGetComponent<PlayerController2>(out var pc) && pc.IsPossessed)
+            return true;
         return Vector3.Distance(transform.position, player.position) > maxChaseDistance;
+    }
+
+    public void MoveTo(Vector3 target)
+    {
+        Vector3 dir = (target - transform.position);
+        dir.y = 0;
+        float distance = dir.magnitude;
+
+        if (distance < 0.1f) return;
+
+        dir.Normalize();
+
+        if (dir != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        }
+
+        Vector3 newPosition = transform.position + dir * speed * Time.deltaTime;
+
+        rb.MovePosition(newPosition);
     }
 
     public override void Initialize()
@@ -72,6 +105,6 @@ public class EnemyController : Person
 
     public override Transform GetCameraTarget()
     {
-        return transform; // Si no hay cámara asociada, se devuelve el propio transform
+        return transform;
     }
 }
