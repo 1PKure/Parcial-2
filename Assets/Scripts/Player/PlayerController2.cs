@@ -10,6 +10,8 @@ public class PlayerController2 : Person
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float jumpCooldown = 0.3f;
+    [SerializeField] private int maxJumpCount = 1;
+    private int currentJumpCount = 0;
 
 
     [Header("Audio")]
@@ -73,10 +75,17 @@ public class PlayerController2 : Person
             rb.velocity = velocity;
         }
     }
-    public void ResetCamera()
+    public void ResetRotation()
     {
+        rotationY = transform.eulerAngles.y;
+        pivot.rotation = Quaternion.Euler(0f, rotationY, 0f);
+
+        rotationX = 0f;
+        cameraTransform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+
         cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
     }
+
     private void HandleRotation()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
@@ -98,17 +107,20 @@ public class PlayerController2 : Person
         if (isGrounded && rb.velocity.y < 0)
         {
             rb.velocity = new Vector3(rb.velocity.x, -2f, rb.velocity.z);
+            currentJumpCount = 0;
         }
 
-        if (JumpPressed && isGrounded && Time.time > lastJumpTime + jumpCooldown)
+        if (JumpPressed && currentJumpCount < maxJumpCount && Time.time > lastJumpTime + jumpCooldown)
         {
             float jumpForce = Mathf.Sqrt(jumpHeight * -2f * gravity);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             lastJumpTime = Time.time;
+            currentJumpCount++;
         }
 
         rb.velocity += new Vector3(0, gravity * Time.deltaTime, 0);
     }
+
 
 
     private bool CanMove(Vector3 moveDir)

@@ -71,3 +71,166 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Builds.zip
+BuildWIN/MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll
+BuildWIN/MonoBleedingEdge/EmbedRuntime/MonoPosixHelper.dll
+BuildWIN/MonoBleedingEdge/etc/mono/2.0/Browsers/Compat.browser
+BuildWIN/MonoBleedingEdge/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
+BuildWIN/MonoBleedingEdge/etc/mono/2.0/machine.config
+BuildWIN/MonoBleedingEdge/etc/mono/2.0/settings.map
+BuildWIN/MonoBleedingEdge/etc/mono/2.0/web.config
+BuildWIN/MonoBleedingEdge/etc/mono/4.0/Browsers/Compat.browser
+BuildWIN/MonoBleedingEdge/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx
+BuildWIN/MonoBleedingEdge/etc/mono/4.0/machine.config
+BuildWIN/MonoBleedingEdge/etc/mono/4.0/settings.map
+BuildWIN/MonoBleedingEdge/etc/mono/4.0/web.config
+BuildWIN/MonoBleedingEdge/etc/mono/4.5/Browsers/Compat.browser
+BuildWIN/MonoBleedingEdge/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx
+BuildWIN/MonoBleedingEdge/etc/mono/4.5/machine.config
+BuildWIN/MonoBleedingEdge/etc/mono/4.5/settings.map
+BuildWIN/MonoBleedingEdge/etc/mono/4.5/web.config
+BuildWIN/MonoBleedingEdge/etc/mono/browscap.ini
+BuildWIN/MonoBleedingEdge/etc/mono/config
+BuildWIN/MonoBleedingEdge/etc/mono/mconfig/config.xml
+BuildWIN/Parcial 2.exe
+BuildWIN/Parcial 2_BurstDebugInformation_DoNotShip/Data/Plugins/x86_64/lib_burst_generated.txt
+BuildWIN/Parcial 2_Data/app.info
+BuildWIN/Parcial 2_Data/boot.config
+BuildWIN/Parcial 2_Data/globalgamemanagers
+BuildWIN/Parcial 2_Data/globalgamemanagers.assets
+BuildWIN/Parcial 2_Data/globalgamemanagers.assets.resS
+BuildWIN/Parcial 2_Data/level0
+BuildWIN/Parcial 2_Data/level0.resS
+BuildWIN/Parcial 2_Data/level1
+BuildWIN/Parcial 2_Data/level1.resS
+BuildWIN/Parcial 2_Data/level2
+BuildWIN/Parcial 2_Data/level2.resS
+BuildWIN/Parcial 2_Data/Managed/Assembly-CSharp.dll
+BuildWIN/Parcial 2_Data/Managed/Mono.Security.dll
+BuildWIN/Parcial 2_Data/Managed/mscorlib.dll
+BuildWIN/Parcial 2_Data/Managed/netstandard.dll
+BuildWIN/Parcial 2_Data/Managed/System.ComponentModel.Composition.dll
+BuildWIN/Parcial 2_Data/Managed/System.Configuration.dll
+BuildWIN/Parcial 2_Data/Managed/System.Core.dll
+BuildWIN/Parcial 2_Data/Managed/System.Data.DataSetExtensions.dll
+BuildWIN/Parcial 2_Data/Managed/System.Data.dll
+BuildWIN/Parcial 2_Data/Managed/System.dll
+BuildWIN/Parcial 2_Data/Managed/System.Drawing.dll
+BuildWIN/Parcial 2_Data/Managed/System.EnterpriseServices.dll
+BuildWIN/Parcial 2_Data/Managed/System.IO.Compression.dll
+BuildWIN/Parcial 2_Data/Managed/System.IO.Compression.FileSystem.dll
+BuildWIN/Parcial 2_Data/Managed/System.Net.Http.dll
+BuildWIN/Parcial 2_Data/Managed/System.Numerics.dll
+BuildWIN/Parcial 2_Data/Managed/System.Runtime.dll
+BuildWIN/Parcial 2_Data/Managed/System.Runtime.Serialization.dll
+BuildWIN/Parcial 2_Data/Managed/System.Security.dll
+BuildWIN/Parcial 2_Data/Managed/System.ServiceModel.Internals.dll
+BuildWIN/Parcial 2_Data/Managed/System.Transactions.dll
+BuildWIN/Parcial 2_Data/Managed/System.Xml.dll
+BuildWIN/Parcial 2_Data/Managed/System.Xml.Linq.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.Burst.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.Burst.Unsafe.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.Mathematics.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.ProBuilder.Csg.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.ProBuilder.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.ProBuilder.KdTree.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.ProBuilder.Poly2Tri.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.ProBuilder.Stl.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipeline.Universal.ShaderLibrary.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipelines.Core.Runtime.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipelines.Core.ShaderLibrary.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipelines.Universal.Config.Runtime.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipelines.Universal.Runtime.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.RenderPipelines.Universal.Shaders.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.TerrainTools.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.TextMeshPro.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.Timeline.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.VisualScripting.Antlr3.Runtime.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.VisualScripting.Core.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.VisualScripting.Flow.dll
+BuildWIN/Parcial 2_Data/Managed/Unity.VisualScripting.State.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.AccessibilityModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.AIModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.AndroidJNIModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.AnimationModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ARModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.AssetBundleModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.AudioModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ClothModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ClusterInputModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ClusterRendererModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ContentLoadModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.CoreModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.CrashReportingModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.DirectorModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.DSPGraphModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.GameCenterModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.GIModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.GridModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.HotReloadModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ImageConversionModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.IMGUIModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.InputLegacyModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.InputModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.JSONSerializeModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.LocalizationModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.NVIDIAModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ParticleSystemModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.PerformanceReportingModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.Physics2DModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.PhysicsModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ProfilerModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.PropertiesModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.ScreenCaptureModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.SharedInternalsModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.SpriteMaskModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.SpriteShapeModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.StreamingModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.SubstanceModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.SubsystemsModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TerrainModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TerrainPhysicsModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TextCoreFontEngineModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TextCoreTextEngineModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TextRenderingModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TilemapModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.TLSModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UI.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UIElementsModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UIModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UmbraModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityAnalyticsCommonModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityAnalyticsModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityConnectModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityCurlModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityTestProtocolModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityWebRequestAssetBundleModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityWebRequestAudioModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityWebRequestModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityWebRequestTextureModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.VehiclesModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.VFXModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.VideoModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.VirtualTexturingModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.VRModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.WindModule.dll
+BuildWIN/Parcial 2_Data/Managed/UnityEngine.XRModule.dll
+BuildWIN/Parcial 2_Data/Plugins/x86_64/lib_burst_generated.dll
+BuildWIN/Parcial 2_Data/resources.assets
+BuildWIN/Parcial 2_Data/resources.assets.resS
+BuildWIN/Parcial 2_Data/Resources/unity default resources
+BuildWIN/Parcial 2_Data/Resources/unity_builtin_extra
+BuildWIN/Parcial 2_Data/RuntimeInitializeOnLoads.json
+BuildWIN/Parcial 2_Data/ScriptingAssemblies.json
+BuildWIN/Parcial 2_Data/sharedassets0.assets
+BuildWIN/Parcial 2_Data/sharedassets0.assets.resS
+BuildWIN/Parcial 2_Data/sharedassets1.assets
+BuildWIN/Parcial 2_Data/sharedassets1.assets.resS
+BuildWIN/Parcial 2_Data/sharedassets1.resource
+BuildWIN/Parcial 2_Data/sharedassets2.assets
+BuildWIN/UnityCrashHandler64.exe
+BuildWIN/UnityPlayer.dll
+BuildWIN.zip

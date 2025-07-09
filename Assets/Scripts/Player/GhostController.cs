@@ -32,7 +32,18 @@ public class GhostController : MonoBehaviour
 
     void TryPossess()
     {
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        // Obtenemos la cámara del holder, que puede estar en un hijo
+        Camera cam = cameraHolder != null ? cameraHolder.GetComponentInChildren<Camera>() : null;
+
+        if (cam == null)
+        {
+            Debug.LogWarning("Cámara no encontrada al intentar poseer.");
+            return;
+        }
+
+        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        Debug.DrawRay(ray.origin, ray.direction * possessionRange, Color.red, 1f);
+
         if (Physics.Raycast(ray, out RaycastHit hit, possessionRange))
         {
             if (hit.collider.CompareTag("Possessable"))
@@ -47,6 +58,7 @@ public class GhostController : MonoBehaviour
         isPossessing = true;
         playerController.IsPossessed = true;
         playerController.enabled = false;
+
         foreach (var comp in originalBody.GetComponents<MonoBehaviour>())
         {
             if (comp != this)
@@ -81,6 +93,7 @@ public class GhostController : MonoBehaviour
 
         isPossessing = false;
         playerController.IsPossessed = false;
+
         foreach (var comp in originalBody.GetComponents<MonoBehaviour>())
         {
             comp.enabled = true;
@@ -91,7 +104,7 @@ public class GhostController : MonoBehaviour
         cameraHolder.localRotation = Quaternion.identity;
 
         cameraController.SetTarget(originalBody);
-        playerController.ResetCamera();
         playerController.SetCameraTarget(originalBody);
+        playerController.ResetRotation();
     }
 }
