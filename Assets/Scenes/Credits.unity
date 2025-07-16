@@ -1104,7 +1104,6 @@ MonoBehaviour:
   loadingScreen: {fileID: 1123330256}
   fakeLoadingBar: {fileID: 478843091}
   fakeDuration: 3
-  Canvas: {fileID: 1567319366}
 --- !u!4 &1384529626
 Transform:
   m_ObjectHideFlags: 0

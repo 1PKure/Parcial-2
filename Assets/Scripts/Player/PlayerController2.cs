@@ -22,12 +22,12 @@ public class PlayerController2 : Person
     [SerializeField] float timeAudio = 0;
 
     [Header("Camera")]
-    [SerializeField] private Transform firstPersonCameraTransform;
-    [SerializeField] private Transform thirdPersonCameraTransform;
-    [SerializeField] private Transform pivot;
+    [SerializeField] public Transform firstPersonCameraTransform;
+    [SerializeField] public Transform thirdPersonCameraTransform;
+    [SerializeField] public Transform pivot;
     [SerializeField] public Transform cameraTransform;
 
-    private bool isFirstPerson = true;
+    public bool isFirstPerson = true;
     private bool isGrounded;
     private Rigidbody rb;
     private bool isMoving = false;
@@ -116,6 +116,7 @@ public class PlayerController2 : Person
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             lastJumpTime = Time.time;
             currentJumpCount++;
+            AudioManager.Instance?.PlayJump();
         }
 
         rb.velocity += new Vector3(0, gravity * Time.deltaTime, 0);
@@ -239,9 +240,13 @@ public class PlayerController2 : Person
 
     public override void DisableControl()
     {
-        enabled = false;
         foreach (var comp in GetComponents<MonoBehaviour>())
-            if (comp != this) comp.enabled = false;
+        {
+            if (comp != this && !(comp is GhostController))
+                comp.enabled = false;
+        }
+
+        enabled = false;
     }
 
     public override Transform GetCameraTarget()
