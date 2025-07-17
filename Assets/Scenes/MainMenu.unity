@@ -2102,6 +2102,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3ab5427d5c5e64bb7d10c20f1db28f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: e9f3958864d65db4da29595a05099adc, type: 2}
+  masterParam: MasterVolume
+  sfxParam: SFXVolume
+  musicParam: MusicVolume
   sfxSource: {fileID: 1857521404}
   uiHoverClip: {fileID: 8300000, guid: 6c11648446583cb47b7aaa989321c08e, type: 3}
   jumpClip: {fileID: 8300000, guid: 8ddd5d8f401684345ad7927f385b84b2, type: 3}
@@ -2289,7 +2293,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 772370999}
   - {fileID: 1174088521}
+  - {fileID: 613974743}
   - {fileID: 1760483134}
   - {fileID: 43327273}
-  - {fileID: 613974743}
   - {fileID: 1857521406}

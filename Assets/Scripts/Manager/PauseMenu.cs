@@ -9,11 +9,13 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject creditsPanel;
 
+    [Header("Audio UI")]
     [SerializeField] private Slider masterSlider;
     [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider musicSlider;
 
-    [SerializeField] private AudioMixer audioMixer;
-
+    [Header("Botones con sonido")]
+    [SerializeField] private Button[] buttonsWithSound;
     private bool isPaused = false;
     private PlayerController2 playerController;
 
@@ -21,13 +23,12 @@ public class PauseMenu : MonoBehaviour
     {
 
         playerController = FindObjectOfType<PlayerController2>();
-        float masterVol;
-        audioMixer.GetFloat("MasterVolume", out masterVol);
-        masterSlider.value = Mathf.Pow(10, masterVol / 20f);
+        AudioManager.Instance.InitSlider(masterSlider, "MasterVolume");
+        AudioManager.Instance.InitSlider(sfxSlider, "SFXVolume");
+        AudioManager.Instance.InitSlider(musicSlider, "MusicVolume");
 
-        float sfxVol;
-        audioMixer.GetFloat("SFXVolume", out sfxVol);
-        sfxSlider.value = Mathf.Pow(10, sfxVol / 20f);
+        foreach (Button b in buttonsWithSound)
+            AudioManager.Instance.AddHoverSound(b);
     }
 
     private void Update()
@@ -87,17 +88,5 @@ public class PauseMenu : MonoBehaviour
 #else
         Application.Quit();
 #endif
-    }
-
-    public void SetMasterVolume()
-    {
-        float volume = masterSlider.value;
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
-    }
-
-    public void SetSFXVolume()
-    {
-        float volume = sfxSlider.value;
-        audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20);
     }
 }
