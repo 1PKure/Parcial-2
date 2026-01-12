@@ -13,7 +13,7 @@ public class SpecialRock : MonoBehaviour
         {
             if (GameManager.Instance.HasAllStones())
             {
-                SceneLoader.Instance.LoadSceneWithFakeLoading(nextSceneName);
+                SceneLoader.Instance.LoadSceneSingle(nextSceneName);
             }
             else
             {

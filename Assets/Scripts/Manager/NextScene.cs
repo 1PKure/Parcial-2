@@ -28,7 +28,7 @@ public class NextSceneClickTrigger : MonoBehaviour
     {
         if (!GameManager.Instance.HasAllStones()) return;
 
-        SceneLoader.Instance.LoadSceneWithFakeLoading(nextSceneName);
+        SceneLoader.Instance.LoadSceneSingle(nextSceneName);
     }
 }
 

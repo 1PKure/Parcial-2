@@ -27,20 +27,22 @@ public class PlayerController2 : Person
     [SerializeField] public Transform pivot;
     [SerializeField] public Transform cameraTransform;
 
+    [Header("Jump")]
+    [SerializeField] private float jumpHeight = 5f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float groundDistance = 0.4f;
+    [SerializeField] private float lastJumpTime = -10f;
+
     public bool isFirstPerson = true;
     private bool isGrounded;
     private Rigidbody rb;
     private bool isMoving = false;
-    private float jumpHeight = 5f;
-    private float gravity = -9.81f;
-    private float groundDistance = 0.4f;
-    private float lastJumpTime = -10f;
-    // FSM
+    
     private StateMachine stateMachine;
-    private float mouseSensitivity = 120f;
+    private float mouseSensitivity = 200f;
     private float rotationY = 0f;
     private float rotationX = 0f;
-    private float maxAngle = 40f;
+    private float maxAngle = 80f;
     private bool initialized = false;
     private bool JumpPressed => Input.GetKeyDown(KeyCode.Space);
     public bool IsPossessed { get; set; }
@@ -256,19 +258,26 @@ public class PlayerController2 : Person
 
     public void SetupFromTemplate(PlayerController2 template)
     {
-        this.pivot = template.pivot;
-        this.cameraTransform = template.cameraTransform;
-        this.firstPersonCameraTransform = template.firstPersonCameraTransform;
-        this.thirdPersonCameraTransform = template.thirdPersonCameraTransform;
-
         this.maxAngleMovement = template.maxAngleMovement;
         this.moveSpeed = template.moveSpeed;
-        this.groundCheck = template.groundCheck;
         this.groundMask = template.groundMask;
 
+        this.jumpHeight = template.jumpHeight;
+        this.gravity = template.gravity;
+        this.groundDistance = template.groundDistance;
+
+        this.maxTimeAudio = template.maxTimeAudio;
+        this.clips = new List<AudioClip>(template.clips);
         this.audioSourceSteps = template.audioSourceSteps;
         this.audioSourceMusic = template.audioSourceMusic;
-        this.clips = new List<AudioClip>(template.clips);
-        this.maxTimeAudio = template.maxTimeAudio;
+    }
+
+    public void InjectRuntimeRefs(Transform pivotRef, Transform camRef, Transform groundCheckRef)
+    {
+        pivot = pivotRef;
+        cameraTransform = camRef;
+        firstPersonCameraTransform = camRef;
+        thirdPersonCameraTransform = camRef;
+        groundCheck = groundCheckRef;
     }
 }

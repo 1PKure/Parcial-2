@@ -23,8 +23,9 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene(string targetScene)
     {
-        SceneLoader.Instance.LoadSceneWithFakeLoading(targetScene);
+        SceneLoader.Instance.LoadSceneSingle(targetScene);
     }
+
 
     public void AddMagicStone()
     {

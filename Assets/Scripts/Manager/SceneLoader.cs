@@ -1,80 +1,165 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
+using TMPro;
+using UnityEngine.EventSystems;
 
 public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance { get; private set; }
 
-    [SerializeField] private GameObject loadingScreen;
+    [Header("UI")]
+    [SerializeField] private GameObject loadingRoot;
     [SerializeField] private Slider fakeLoadingBar;
-    [SerializeField] private float fakeDuration = 3f;
+    [SerializeField] private TMP_Text loadingText;
+
+    [Header("Fake Loading")]
+    [SerializeField] private float minFakeDuration = 1.50f; 
+    [SerializeField] private float extraFakePadding = 0.25f; 
 
     private void Awake()
     {
+        Debug.Log($"[SceneLoader] Awake en escena: {UnityEngine.SceneManagement.SceneManager.GetActiveScene().name} - gameObject: {name}");
+
+        if (transform.parent != null)
+        {
+            Debug.LogWarning("[SceneLoader] WARNING: SceneLoader NO es root. DontDestroyOnLoad falla si no es root.");
+            transform.SetParent(null);
+        }
+
         if (Instance != null && Instance != this)
         {
+            Debug.LogWarning("[SceneLoader] Duplicado detectado. Destruyendo este.");
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SetLoading(false);
+    }
+
+    public void LoadSceneSingle(string sceneName)
+    {
+        StartCoroutine(CoLoadScene(sceneName, LoadSceneMode.Single));
+        EnsureEventSystem();
+        Time.timeScale = 1f;
     }
 
     public void LoadSceneWithFakeLoading(string sceneName)
     {
-        if (loadingScreen == null || fakeLoadingBar == null)
-        {
-            UIManager.Instance.ShowMessage("SceneLoader: loadingScreen o fakeLoadingBar no están asignados.");
-            return;
-        }
-        StartCoroutine(LoadSceneWithFakeBar(sceneName));
+        LoadSceneSingle(sceneName);
+    }
+    public void LoadSceneAdditive(string sceneName)
+    {
+        StartCoroutine(CoLoadScene(sceneName, LoadSceneMode.Additive));
     }
 
-    private IEnumerator LoadSceneWithFakeBar(string sceneName)
+    public void UnloadScene(string sceneName)
     {
-        loadingScreen.SetActive(true);
-        fakeLoadingBar.gameObject.SetActive(true);
-        fakeLoadingBar.value = 0;
+        StartCoroutine(CoUnloadScene(sceneName));
+    }
 
-        AsyncOperation realLoad = SceneManager.LoadSceneAsync(sceneName);
-        realLoad.allowSceneActivation = false;
-
-        float elapsed = 0f;
-
-        while (elapsed < fakeDuration)
+    private IEnumerator CoLoadScene(string sceneName, LoadSceneMode mode)
+    {
+        
+        if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            elapsed += Time.deltaTime;
-            float fakeProgress = Mathf.Clamp01(elapsed / fakeDuration);
-            fakeLoadingBar.value = fakeProgress;
+            Debug.LogError($"[SceneLoader] Scene '{sceneName}' no está en Build Settings o el nombre es incorrecto.");
+            yield break;
+        }
 
-            if (realLoad.progress >= 0.9f && fakeProgress >= 0.99f)
-                break;
+        SetLoading(true);
+        SetProgress(0f, $"Loading {sceneName}...");
 
+        float startTime = Time.unscaledTime;
+
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, mode);
+        op.allowSceneActivation = false;
+
+        while (op.progress < 0.9f)
+        {
+            float t = Mathf.Clamp01(op.progress / 0.9f);
+            
+            float target = Mathf.Lerp(0f, 0.85f, t);
+            SetProgress(target);
             yield return null;
         }
-        yield return new WaitForSeconds(0.3f);
 
-        fakeLoadingBar.value = 1f;
+      
+        float elapsed = Time.unscaledTime - startTime;
+        float remaining = Mathf.Max(0f, minFakeDuration - elapsed);
+        float fakeTime = remaining + extraFakePadding;
 
-        realLoad.allowSceneActivation = true;
-        while (!realLoad.isDone)
+        float current = fakeLoadingBar.value;
+        float timer = 0f;
+        while (timer < fakeTime)
+        {
+            timer += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(timer / fakeTime);
+            float target = Mathf.Lerp(current, 1f, t);
+            SetProgress(target);
+            yield return null;
+        }
+
+      
+        op.allowSceneActivation = true;
+
+   
+        while (!op.isDone)
             yield return null;
 
-        if (loadingScreen != null)
-            loadingScreen.SetActive(false);
+        SetProgress(1f, "Done!");
+        yield return new WaitForSecondsRealtime(0.15f);
+        SetLoading(false);
+    }
 
+    private IEnumerator CoUnloadScene(string sceneName)
+    {
+        if (!SceneManager.GetSceneByName(sceneName).isLoaded)
+        {
+            Debug.LogWarning($"[SceneLoader] Unload pedido pero '{sceneName}' no está cargada.");
+            yield break;
+        }
+
+        SetLoading(true);
+        SetProgress(0f, $"Unloading {sceneName}...");
+
+        AsyncOperation op = SceneManager.UnloadSceneAsync(sceneName);
+
+        while (!op.isDone)
+        {
+            SetProgress(Mathf.Clamp01(op.progress));
+            yield return null;
+        }
+
+        SetProgress(1f, "Done!");
+        yield return new WaitForSecondsRealtime(0.1f);
+        SetLoading(false);
+    }
+
+    private void SetLoading(bool active)
+    {
+        if (loadingRoot != null)
+            loadingRoot.SetActive(active);
+    }
+
+    private void SetProgress(float value, string text = null)
+    {
         if (fakeLoadingBar != null)
-            fakeLoadingBar.gameObject.SetActive(false);
+            fakeLoadingBar.value = value;
+
+        if (loadingText != null && !string.IsNullOrEmpty(text))
+            loadingText.text = text;
     }
 
-    public void ExitGame()
+    private void EnsureEventSystem()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        if (EventSystem.current != null) return;
+        new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
     }
+
+
 }
