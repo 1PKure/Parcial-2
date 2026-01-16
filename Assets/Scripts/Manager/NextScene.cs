@@ -1,34 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class NextSceneClickTrigger : MonoBehaviour
+public class NextScene : MonoBehaviour
 {
     [SerializeField] private string nextSceneName = "Gameplay";
     [SerializeField] private GameObject instructionText;
-    private void OnMouseEnter()
-    {
-        if (!GameManager.Instance.HasAllStones()) return;
+    [SerializeField] private KeyCode interactKey = KeyCode.E;
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+    private bool _playerInside = false;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+        _playerInside = true;
+
         if (instructionText != null)
-            instructionText.SetActive(true);
+            instructionText.SetActive(GameManager.Instance.HasAllStones());
     }
 
-    private void OnMouseExit()
+    private void OnTriggerExit(Collider other)
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (!other.CompareTag("Player")) return;
+        _playerInside = false;
+
         if (instructionText != null)
             instructionText.SetActive(false);
     }
 
-    private void OnMouseDown()
+    private void Update()
     {
+        if (!_playerInside) return;
         if (!GameManager.Instance.HasAllStones()) return;
 
-        SceneLoader.Instance.LoadSceneSingle(nextSceneName);
+        if (Input.GetKeyDown(interactKey))
+        {
+            SceneLoader.Instance.LoadSceneSingle(nextSceneName);
+        }
     }
 }
-

@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public string sceneToLoad = "";
     private int collectedStones = 0;
     public int totalStones = 5;
-    public GameObject specialRock;
+    public GameObject specialStone;
 
     private void Awake()
     {
@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour
     private void UnlockRock()
     {
         UIManager.Instance.ShowMessage("¡Piedras completas! Roca desbloqueada.");
-        if (specialRock != null)
-            specialRock.SetActive(false);
+        if (specialStone != null)
+            specialStone.SetActive(false);
     }
     public bool HasAllStones()
     {

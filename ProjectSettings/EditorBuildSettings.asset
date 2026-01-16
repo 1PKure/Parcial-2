@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Gameplay.unity
     guid: f327bacbd7430ab4e82ecffb6407cc01
   - enabled: 1
+    path: Assets/Scenes/Interior Cave.unity
+    guid: 5f32d29840e4a234b8476be0c5df016f
+  - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: b0e2b4a784a7e5941b493fb09a897afd
   m_configObjects: {}

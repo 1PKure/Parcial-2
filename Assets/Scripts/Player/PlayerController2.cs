@@ -66,9 +66,10 @@ public class PlayerController2 : Person
             cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
         }
     }
-
     public void Move(Vector3 moveDir)
     {
+        if (moveDir.sqrMagnitude > 1f) moveDir.Normalize();
+
         Vector3 velocity = new Vector3(moveDir.x * moveSpeed, rb.velocity.y, moveDir.z * moveSpeed);
 
         if (CanMove(moveDir))
@@ -125,7 +126,7 @@ public class PlayerController2 : Person
     }
 
 
-
+    /*
     private bool CanMove(Vector3 moveDir)
     {
         Terrain terrain = Terrain.activeTerrain;
@@ -140,6 +141,40 @@ public class PlayerController2 : Person
             return false;
         return true;
     }
+    */
+    private bool CanMove(Vector3 moveDir)
+    {
+        if (moveDir.sqrMagnitude < 0.0001f) return true;
+
+        if (Physics.Raycast(transform.position + Vector3.up * 0.2f, Vector3.down, out RaycastHit groundHit, 2f, groundMask))
+        {
+            float groundAngle = Vector3.Angle(groundHit.normal, Vector3.up);
+
+            if (groundAngle > maxAngleMovement)
+            {
+                Vector3 downhill = Vector3.ProjectOnPlane(Vector3.down, groundHit.normal).normalized;
+                if (Vector3.Dot(moveDir.normalized, downhill) <= 0.05f)
+                    return false;
+            }
+        }
+
+        float castDistance = 0.6f;
+        float radius = 0.35f;
+
+        Vector3 p1 = transform.position + Vector3.up * 0.2f;
+        Vector3 p2 = transform.position + Vector3.up * 1.6f;
+
+        if (Physics.CapsuleCast(p1, p2, radius, moveDir.normalized, out RaycastHit hit, castDistance, groundMask))
+        {
+            float hitAngle = Vector3.Angle(hit.normal, Vector3.up);
+
+            if (hitAngle > maxAngleMovement)
+                return false;
+        }
+
+        return true;
+    }
+
 
     private void PlayAudio()
     {

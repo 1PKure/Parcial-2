@@ -5,20 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class SpecialRock : MonoBehaviour
 {
-    [SerializeField] private string nextSceneName;
+    [SerializeField] private Collider blockingCollider;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player")) return;
+
+        if (!GameManager.Instance.HasAllStones())
         {
-            if (GameManager.Instance.HasAllStones())
-            {
-                SceneLoader.Instance.LoadSceneSingle(nextSceneName);
-            }
-            else
-            {
-                UIManager.Instance.ShowMessage("Aún te faltan piedras mágicas.");
-            }
+            UIManager.Instance.ShowMessage("Aún te faltan piedras mágicas.");
+        }
+        else
+        {
+            blockingCollider.enabled = false;
         }
     }
 }
+
