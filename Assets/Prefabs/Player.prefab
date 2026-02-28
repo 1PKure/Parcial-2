@@ -382,6 +382,7 @@ MonoBehaviour:
   gravity: -9.81
   groundDistance: 0.4
   lastJumpTime: -10
+  groundRayDistance: 3
   isFirstPerson: 1
 --- !u!135 &7322386518387884174
 SphereCollider:
@@ -499,6 +500,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6517643566835949278}
   - component: {fileID: 8187464304808282529}
+  - component: {fileID: 8003979198672214226}
   m_Layer: 0
   m_Name: 3rd person
   m_TagString: Untagged
@@ -572,6 +574,14 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!81 &8003979198672214226
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7028623155798926553}
+  m_Enabled: 1
 --- !u!1 &7094183354819630681
 GameObject:
   m_ObjectHideFlags: 0

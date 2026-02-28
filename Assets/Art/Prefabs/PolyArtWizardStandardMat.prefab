@@ -722,10 +722,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3072609
-  m_Height: 1.882848
+  m_Radius: 0.4
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.98, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &6140369569121730384
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -766,10 +766,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firePoint: {fileID: 218610799747035450}
-  projectilePrefab: {fileID: 0}
-  attackCooldown: 2
-  detectionRange: 10
+  projectilePrefab: {fileID: 9088196986680933364, guid: bc78019ff9159224eb541afb3660ca48, type: 3}
+  attackCooldown: 1
+  detectionRange: 20
   player: {fileID: 0}
+  aimHeightOffset: 0.5
 --- !u!1 &1251583507443948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2665,7 +2666,7 @@ Transform:
   m_GameObject: {fileID: 4059239700765826469}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.723, y: 1.082, z: 0.875}
+  m_LocalPosition: {x: 0.412, y: 0.935, z: 1.044}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

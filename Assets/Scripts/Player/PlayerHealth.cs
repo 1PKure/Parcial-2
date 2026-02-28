@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,7 +7,8 @@ public class PlayerHealth : MonoBehaviour
 {
     public float maxHealth = 100;
     private float currentHealth;
-    [SerializeField] private Image healthBar;
+
+    public event Action<float> OnDamaged;
 
     private void Start()
     {
@@ -16,8 +18,13 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (amount <= 0f) return;
+
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        OnDamaged?.Invoke(amount);
+
         UIManager.Instance.UpdateHealthUI(currentHealth, maxHealth);
 
         if (currentHealth <= 0)

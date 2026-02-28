@@ -10,18 +10,26 @@ public class RangedEnemyController : MonoBehaviour
     [SerializeField] private float detectionRange = 10f;
     [SerializeField] private Transform player;
 
+    [Header("Aim")]
+    [SerializeField] private float aimHeightOffset = 1.2f;
+
+
     private float lastAttackTime;
     private StateMachine stateMachine;
-
     private void Start()
     {
+        if (player == null)
+        {
+            var p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null) player = p.transform;
+        }
+
         stateMachine = new StateMachine();
 
         stateMachine.AddState(new EnemyPatrolState(this, stateMachine));
         stateMachine.AddState(new EnemyRangedAttackState(this));
         stateMachine.ChangeState(StateType.Patrol);
     }
-
     private void Update()
     {
         stateMachine.Update();
@@ -46,18 +54,36 @@ public class RangedEnemyController : MonoBehaviour
     public void LookAtPlayer()
     {
         if (player == null) return;
-        Vector3 lookDir = (player.position - transform.position).normalized;
-        lookDir.y = 0;
-        transform.forward = lookDir;
+
+        Vector3 lookDir = (player.position - transform.position);
+        lookDir.y = 0f;
+        if (lookDir.sqrMagnitude > 0.001f)
+            transform.forward = lookDir.normalized;
     }
 
     public void Shoot()
     {
-        if (Time.time >= lastAttackTime + attackCooldown)
+        if (player == null || firePoint == null || projectilePrefab == null) return;
+        if (Time.time < lastAttackTime + attackCooldown) return;
+
+        Vector3 targetPos = player.position + Vector3.up * aimHeightOffset;
+        Vector3 dir = (targetPos - firePoint.position).normalized;
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+
+        GameObject go = Instantiate(projectilePrefab, firePoint.position, rot);
+
+        var proj = go.GetComponent<EnemyProjectile>();
+        if (proj != null)
         {
-            Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-            lastAttackTime = Time.time;
+            proj.Init(dir, proj.damage, proj.speed);
         }
+        else
+        {
+            var rb = go.GetComponent<Rigidbody>();
+            if (rb != null) rb.velocity = dir * 15f;
+        }
+
+        lastAttackTime = Time.time;
     }
 }
 

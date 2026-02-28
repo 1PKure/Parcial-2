@@ -8,10 +8,8 @@ public class AudioManager : MonoBehaviour
 
     [Header("Mixer & Volumen")]
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private string masterParam = "MasterVolume";
-    [SerializeField] private string sfxParam = "SFXVolume";
-    [SerializeField] private string musicParam = "MusicVolume";
 
+    [SerializeField] private AudioSource musicSource;
 
     [Header("Audio Sources & Clips")]
     [SerializeField] private AudioSource sfxSource;
@@ -70,5 +68,18 @@ public class AudioManager : MonoBehaviour
         };
         entry.callback.AddListener((eventData) => { PlayUIHover(); });
         trigger.triggers.Add(entry);
+    }
+
+    public void PlayMusic(AudioClip clip, bool loop = true, float volume = 1f)
+    {
+        if (musicSource == null || clip == null) return;
+
+        if (musicSource.clip == clip && musicSource.isPlaying) return;
+
+        musicSource.clip = clip;
+        musicSource.loop = loop;
+        musicSource.volume = volume;
+        musicSource.spatialBlend = 0f;
+        musicSource.Play();
     }
 }

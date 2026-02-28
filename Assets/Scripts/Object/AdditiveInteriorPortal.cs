@@ -12,7 +12,7 @@ public class AdditiveInteriorPortal : MonoBehaviour
     [SerializeField] private KeyCode interactKey = KeyCode.E;
     [SerializeField] private GameObject instructionText;
 
-    public GameObject World;
+    //public GameObject World;
     private bool _playerInside;
     private bool _busy;
     private Transform _player;
@@ -31,6 +31,9 @@ public class AdditiveInteriorPortal : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+
+        if (_busy) return;
+
         _playerInside = false;
         _player = null;
         if (instructionText != null) instructionText.SetActive(false);
@@ -48,14 +51,15 @@ public class AdditiveInteriorPortal : MonoBehaviour
         _busy = true;
         Time.timeScale = 1f;
         if (instructionText != null) instructionText.SetActive(false);
-
+        var playerTransform = _player;
 
         if (_cachedExteriorSpawn == null)
             _cachedExteriorSpawn = FindSpawnInActiveScenes(SpawnId.Exterior);
 
         if (isEntrance)
         {
-            World.SetActive(false);
+            
+            //World.SetActive(false);
             SceneLoader.Instance.LoadSceneAdditive(interiorSceneName);
 
             while (!SceneManager.GetSceneByName(interiorSceneName).isLoaded)
@@ -66,13 +70,13 @@ public class AdditiveInteriorPortal : MonoBehaviour
             if (_cachedInteriorSpawn == null)
                 _cachedInteriorSpawn = FindSpawnInScene(interiorSceneName, SpawnId.Interior);
 
-            Teleport(_cachedInteriorSpawn);
+            Teleport(playerTransform, _cachedInteriorSpawn);
         }
         else
         {
-            World.SetActive(true);
+            //World.SetActive(true);
 
-            Teleport(_cachedExteriorSpawn);
+            Teleport(playerTransform, _cachedExteriorSpawn);
 
             SceneLoader.Instance.UnloadScene(interiorSceneName);
             while (SceneManager.GetSceneByName(interiorSceneName).isLoaded)
@@ -82,22 +86,13 @@ public class AdditiveInteriorPortal : MonoBehaviour
         _busy = false;
     }
 
-    private void Teleport(Transform target)
+    private void Teleport(Transform playerTransform, Transform target)
     {
-        if (_player == null)
-        {
-            Debug.LogError("Player null.");
-            return;
-        }
+        if (playerTransform == null) { Debug.LogError("Player null."); return; }
+        if (target == null) { Debug.LogError("Spawn target null."); return; }
 
-        if (target == null)
-        {
-            Debug.LogError(" Spawn target null (falta SpawnPointMarker en la escena).");
-            return;
-        }
-
-        _player.position = target.position;
-        _player.rotation = target.rotation;
+        playerTransform.position = target.position;
+        playerTransform.rotation = target.rotation;
     }
 
     private Transform FindSpawnInScene(string sceneName, SpawnId id)
