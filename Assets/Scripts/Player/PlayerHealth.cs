@@ -9,16 +9,20 @@ public class PlayerHealth : MonoBehaviour
     private float currentHealth;
 
     public event Action<float> OnDamaged;
-
+    [SerializeField] private bool invulnerable;
     private void Start()
     {
         currentHealth = maxHealth;
         UIManager.Instance.UpdateHealthUI(currentHealth, maxHealth);
     }
-
+    public void SetInvulnerable(bool value)
+    {
+        invulnerable = value;
+    }
     public void TakeDamage(float amount)
     {
         if (amount <= 0f) return;
+        if (invulnerable) return;
 
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);

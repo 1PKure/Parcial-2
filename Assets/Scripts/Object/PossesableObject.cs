@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class PossessableObject : Person, IPossessable
+
 {
     private Renderer rend;
 

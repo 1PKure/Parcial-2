@@ -23,9 +23,10 @@ public class EnemyAttackState : State
 
     public override void Update()
     {
+
         if (!enemy.PlayerInRange())
         {
-            enemy.GetStateMachine().ChangeState(StateType.Chase);
+            enemy.GetStateMachine().ChangeState(StateType.Patrol);
             return;
         }
 

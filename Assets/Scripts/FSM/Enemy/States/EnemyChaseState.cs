@@ -15,13 +15,11 @@ public class EnemyChaseState : State
 
     public override void Update()
     {
+
         if (!enemy.PlayerInRange())
         {
-            if (enemy.PlayerTooFar())
-            {
-                enemy.GetStateMachine().ChangeState(StateType.Patrol);
-                return;
-            }
+            enemy.GetStateMachine().ChangeState(StateType.Patrol);
+            return;
         }
 
         enemy.MoveTo(enemy.player.position);

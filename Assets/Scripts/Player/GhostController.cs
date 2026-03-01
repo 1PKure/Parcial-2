@@ -9,7 +9,7 @@ public class GhostController : MonoBehaviour
     private PlayerController2 playerController;
 
     private Transform cameraHolder;
-
+    private PlayerHealth playerHealth;
     private Transform originalCameraParent;
     private Vector3 originalCamLocalPos;
     private Quaternion originalCamLocalRot;
@@ -18,9 +18,10 @@ public class GhostController : MonoBehaviour
     private Transform possessGroundCheck;
 
     private bool isPossessing = false;
-
+    public bool IsPossessing => isPossessing;
     private void Start()
     {
+        playerHealth = GetComponent<PlayerHealth>();
         originalController = GetComponent<PlayerController2>();
         playerController = originalController;
 
@@ -54,13 +55,16 @@ public class GhostController : MonoBehaviour
 
     void Possess(GameObject target)
     {
+        playerHealth?.SetInvulnerable(true);
         isPossessing = true;
         currentBody = target;
+        originalController.IsPossessed = true;
 
         foreach (var comp in originalController.GetComponents<MonoBehaviour>())
         {
-            if (comp != this)
-                comp.enabled = false;
+            if (comp == this) continue;                 
+            if (comp is PlayerHealth) continue;
+            comp.enabled = false;
         }
 
         possessPivot = new GameObject("PossessPivot").transform;
@@ -96,7 +100,8 @@ public class GhostController : MonoBehaviour
 
     void Release()
     {
-  
+        playerHealth?.SetInvulnerable(false);
+
         if (playerController != null && playerController != originalController)
             Destroy(playerController);
 
@@ -105,6 +110,7 @@ public class GhostController : MonoBehaviour
 
         currentBody = null;
         isPossessing = false;
+        originalController.IsPossessed = false;
         playerController = originalController;
 
         foreach (var comp in originalController.GetComponents<MonoBehaviour>())

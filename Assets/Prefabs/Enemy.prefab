@@ -48,11 +48,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636ca60936124ba4d9702ed156383995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  speed: 15
-  detectionRange: 5
+  patrolPoints: []
+  useWanderWhenNoPoints: 1
+  wanderRadius: 10
+  wanderRepathTime: 3
+  arriveDistance: 0.8
+  speed: 25
+  detectionRange: 10
   maxChaseDistance: 10
   player: {fileID: 0}
   groundMask:

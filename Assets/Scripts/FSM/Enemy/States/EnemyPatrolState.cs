@@ -26,15 +26,32 @@ public class EnemyPatrolState : State
                 return;
             }
 
-            if (meleeEnemy.patrolPoints.Count == 0) return;
+            if (meleeEnemy.ShouldWander())
+            {
+                Vector3 target = meleeEnemy.GetPatrolTarget();
+                meleeEnemy.MoveTo(target);
 
-            Vector3 target = meleeEnemy.patrolPoints[currentPoint].position;
-            meleeEnemy.MoveTo(target);
+                if (meleeEnemy.ArrivedTo(target))
+                    meleeEnemy.PickNewWanderTarget(true);
 
-            if (Vector3.Distance(meleeEnemy.transform.position, target) < 0.5f)
+                return;
+            }
+
+            if (meleeEnemy.patrolPoints == null || meleeEnemy.patrolPoints.Count == 0)
+                return;
+
+            if (meleeEnemy.patrolPoints[currentPoint] == null)
+            {
+                currentPoint = (currentPoint + 1) % meleeEnemy.patrolPoints.Count;
+                return;
+            }
+
+            Vector3 pointTarget = meleeEnemy.patrolPoints[currentPoint].position;
+            meleeEnemy.MoveTo(pointTarget);
+
+            if (Vector3.Distance(meleeEnemy.transform.position, pointTarget) < 0.5f)
                 currentPoint = (currentPoint + 1) % meleeEnemy.patrolPoints.Count;
         }
-
         else if (enemyBase is RangedEnemyController rangedEnemy)
         {
             if (rangedEnemy.PlayerInRange())
@@ -48,7 +65,7 @@ public class EnemyPatrolState : State
         }
     }
 
-    public override void Exit() 
+    public override void Exit()
     {
         if (rangedEnemy is WizardEnemyController wizard)
             wizard.SetSpeed(0f);
