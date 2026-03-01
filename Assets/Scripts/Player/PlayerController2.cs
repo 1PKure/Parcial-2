@@ -410,14 +410,15 @@ public class PlayerController2 : Person
 
         if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, config.groundRayDistance))
         {
-            terrain = hit.collider.GetComponent<TerrainCollider>()?.GetComponent<Terrain>();
-            if (terrain == null) terrain = hit.collider.GetComponent<Terrain>();
-
-            if (terrain != null)
-            {
-                hitPoint = hit.point;
-                return true;
-            }
+            var terrainCol = hit.collider as TerrainCollider;
+if (terrainCol != null)
+{
+    terrain = terrainCol.GetComponent<Terrain>();
+}
+else
+{
+    terrain = hit.collider.GetComponent<Terrain>();
+}
         }
 
         return false;

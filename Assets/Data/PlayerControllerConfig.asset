@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerControllerConfig
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControllerConfigSO
   maxAngleMovement: 30
-  moveSpeed: 5
+  moveSpeed: 30
   jumpCooldown: 0.3
   maxJumpCount: 1
   jumpHeight: 5

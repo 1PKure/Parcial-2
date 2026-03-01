@@ -9,16 +9,15 @@ public class SphereImpactDamage : MonoBehaviour
     [SerializeField] private float minSpeedToDamage = 2.5f;
 
     private Rigidbody rb;
-    private PlayerController2 controller;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        controller = GetComponent<PlayerController2>();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        var controller = GetComponent<PlayerController2>();
         if (controller == null || !controller.IsPossessed) return;
 
         var wizardHealth = collision.collider.GetComponentInParent<WizardHealth>();

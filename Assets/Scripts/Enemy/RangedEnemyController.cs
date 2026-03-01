@@ -13,22 +13,25 @@ public class RangedEnemyController : MonoBehaviour
     [Header("Aim")]
     [SerializeField] private float aimHeightOffset = 1.2f;
 
-
+    private GhostController ghost;
     private float lastAttackTime;
     private StateMachine stateMachine;
     private void Start()
     {
-        if (player == null)
-        {
-            var p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) player = p.transform;
-        }
-
         stateMachine = new StateMachine();
 
         stateMachine.AddState(new EnemyPatrolState(this, stateMachine));
         stateMachine.AddState(new EnemyRangedAttackState(this));
         stateMachine.ChangeState(StateType.Patrol);
+    }
+    private Transform GetTarget()
+    {
+        if (ghost != null && ghost.IsPossessing)
+        {
+            var target = ghost != null ? ghost.CurrentControlledTransform : player;
+            if (target != null) return target;
+        }
+        return player;
     }
     private void Update()
     {
@@ -47,15 +50,17 @@ public class RangedEnemyController : MonoBehaviour
 
     public bool PlayerInRange()
     {
-        if (player == null) return false;
-        return Vector3.Distance(transform.position, player.position) < detectionRange;
+        var target = GetTarget();
+        if (target == null) return false;
+        return Vector3.Distance(transform.position, target.position) < detectionRange;
     }
 
     public void LookAtPlayer()
     {
-        if (player == null) return;
+        var target = GetTarget();
+        if (target == null) return;
 
-        Vector3 lookDir = (player.position - transform.position);
+        Vector3 lookDir = (target.position - transform.position);
         lookDir.y = 0f;
         if (lookDir.sqrMagnitude > 0.001f)
             transform.forward = lookDir.normalized;
@@ -63,20 +68,20 @@ public class RangedEnemyController : MonoBehaviour
 
     public void Shoot()
     {
-        if (player == null || firePoint == null || projectilePrefab == null) return;
+        var target = GetTarget();
+        if (target == null || firePoint == null || projectilePrefab == null) return;
         if (Time.time < lastAttackTime + attackCooldown) return;
 
-        Vector3 targetPos = player.position + Vector3.up * aimHeightOffset;
+        if (this is WizardEnemyController wiz) wiz.PlayAttackAnimation();
+
+        Vector3 targetPos = target.position + Vector3.up * aimHeightOffset;
         Vector3 dir = (targetPos - firePoint.position).normalized;
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
         GameObject go = Instantiate(projectilePrefab, firePoint.position, rot);
 
         var proj = go.GetComponent<EnemyProjectile>();
-        if (proj != null)
-        {
-            proj.Init(dir, proj.damage, proj.speed);
-        }
+        if (proj != null) proj.Init(dir, proj.damage, proj.speed);
         else
         {
             var rb = go.GetComponent<Rigidbody>();

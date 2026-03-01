@@ -46,6 +46,6 @@ public class WizardHealth : MonoBehaviour
 
         OnDied?.Invoke(this);
 
-        Destroy(gameObject, 3.5f);
+        Destroy(gameObject, 1.5f);
     }
 }

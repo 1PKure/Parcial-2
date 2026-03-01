@@ -8,11 +8,17 @@ public class AdditiveInteriorPortal : MonoBehaviour
     [SerializeField] private string interiorSceneName = "Interior_Cave";
     [SerializeField] private bool isEntrance = true;
 
+    /*
+    [Header("Teleport / Positioning")]
+    [SerializeField] private bool moveInteriorRoot = true;
+    [SerializeField] private Vector3 interiorWorldOffset = new Vector3(0f, 0f, 250f);
+    private static bool _interiorWasMoved;
+    */
+
     [Header("Interact")]
-    [SerializeField] private KeyCode interactKey = KeyCode.E;
+    [SerializeField] private KeyCode interactKey = KeyCode.F; 
     [SerializeField] private GameObject instructionText;
 
-    //public GameObject World;
     private bool _playerInside;
     private bool _busy;
     private Transform _player;
@@ -31,7 +37,6 @@ public class AdditiveInteriorPortal : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-
         if (_busy) return;
 
         _playerInside = false;
@@ -50,33 +55,50 @@ public class AdditiveInteriorPortal : MonoBehaviour
     {
         _busy = true;
         Time.timeScale = 1f;
-        if (instructionText != null) instructionText.SetActive(false);
-        var playerTransform = _player;
 
-        if (_cachedExteriorSpawn == null)
+        if (instructionText != null) instructionText.SetActive(false);
+
+        var playerTransform = _player;
+        if (playerTransform == null)
+        {
+            Debug.LogError("[Portal] Player null.");
+            _busy = false;
+            yield break;
+        }
+
+        /*
+        if (!isEntrance && _cachedExteriorSpawn == null)
             _cachedExteriorSpawn = FindSpawnInActiveScenes(SpawnId.Exterior);
+        */
 
         if (isEntrance)
         {
-            
-            //World.SetActive(false);
             SceneLoader.Instance.LoadSceneAdditive(interiorSceneName);
 
             while (!SceneManager.GetSceneByName(interiorSceneName).isLoaded)
                 yield return null;
 
-            yield return null; 
 
+            while (SceneLoader.Instance != null && SceneLoader.Instance.IsLoading)
+                yield return null;
+
+            /*
+            if (moveInteriorRoot && !_interiorWasMoved)
+            {
+                MoveInteriorRoots(interiorSceneName, interiorWorldOffset);
+                _interiorWasMoved = true;
+            }
+            */
+
+ 
             if (_cachedInteriorSpawn == null)
                 _cachedInteriorSpawn = FindSpawnInScene(interiorSceneName, SpawnId.Interior);
 
-            Teleport(playerTransform, _cachedInteriorSpawn);
+            TeleportSafe(playerTransform, _cachedInteriorSpawn);
         }
         else
         {
-            //World.SetActive(true);
-
-            Teleport(playerTransform, _cachedExteriorSpawn);
+            TeleportSafe(playerTransform, _cachedExteriorSpawn);
 
             SceneLoader.Instance.UnloadScene(interiorSceneName);
             while (SceneManager.GetSceneByName(interiorSceneName).isLoaded)
@@ -86,13 +108,31 @@ public class AdditiveInteriorPortal : MonoBehaviour
         _busy = false;
     }
 
-    private void Teleport(Transform playerTransform, Transform target)
+    private void TeleportSafe(Transform playerTransform, Transform target)
     {
-        if (playerTransform == null) { Debug.LogError("Player null."); return; }
-        if (target == null) { Debug.LogError("Spawn target null."); return; }
+        if (playerTransform == null) { Debug.LogError("[Portal] Player null."); return; }
+        if (target == null) { Debug.LogError("[Portal] Spawn target null."); return; }
 
-        playerTransform.position = target.position;
-        playerTransform.rotation = target.rotation;
+        var rb = playerTransform.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.position = target.position;
+            rb.rotation = target.rotation;
+            rb.Sleep();
+            return;
+        }
+
+        var cc = playerTransform.GetComponent<PlayerController2>();
+        if (cc != null)
+        {
+            cc.enabled = false;
+            playerTransform.SetPositionAndRotation(target.position, target.rotation);
+            cc.enabled = true;
+            return;
+        }
+        playerTransform.SetPositionAndRotation(target.position, target.rotation);
     }
 
     private Transform FindSpawnInScene(string sceneName, SpawnId id)
@@ -100,7 +140,7 @@ public class AdditiveInteriorPortal : MonoBehaviour
         Scene s = SceneManager.GetSceneByName(sceneName);
         if (!s.isLoaded)
         {
-            Debug.LogError($" Scene '{sceneName}' no está cargada.");
+            Debug.LogError($"[Portal] Scene '{sceneName}' no está cargada.");
             return null;
         }
 
@@ -111,6 +151,7 @@ public class AdditiveInteriorPortal : MonoBehaviour
                 if (m.id == id) return m.transform;
         }
 
+        Debug.LogError($"[Portal] No encontré SpawnPointMarker '{id}' dentro de '{sceneName}'.");
         return null;
     }
 
@@ -126,6 +167,26 @@ public class AdditiveInteriorPortal : MonoBehaviour
                     if (m.id == id) return m.transform;
             }
         }
+
+        Debug.LogError($"[Portal] No encontré SpawnPointMarker '{id}' en escenas activas.");
         return null;
+    }
+
+    private void MoveInteriorRoots(string sceneName, Vector3 offset)
+    {
+        var s = SceneManager.GetSceneByName(sceneName);
+        if (!s.isLoaded) return;
+
+        foreach (var root in s.GetRootGameObjects())
+        {
+            if (root.name.Contains("InteriorRoot"))
+            {
+                root.transform.position += offset;
+                return;
+            }
+        }
+
+        foreach (var root in s.GetRootGameObjects())
+            root.transform.position += offset;
     }
 }

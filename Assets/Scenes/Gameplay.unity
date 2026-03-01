@@ -5490,7 +5490,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Apreta la E para avanzar al interior
+  m_text: Apreta la F para avanzar al interior
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4914bfe26b1c5a54484ed26863d5ae4f, type: 2}
   m_sharedMaterial: {fileID: 2210435682791666696, guid: 4914bfe26b1c5a54484ed26863d5ae4f, type: 2}
@@ -26054,7 +26054,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interiorSceneName: Interior Cave
   isEntrance: 1
-  interactKey: 101
+  interactKey: 102
   instructionText: {fileID: 449681535}
 --- !u!1001 &1726086426
 PrefabInstance:
@@ -29809,7 +29809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8376635950178340080, guid: bcc188c55c8614f49984464e1a587696, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -187.6
+      value: -42.5
       objectReference: {fileID: 0}
     - target: {fileID: 8376635950178340080, guid: bcc188c55c8614f49984464e1a587696, type: 3}
       propertyPath: m_LocalPosition.y
@@ -29817,7 +29817,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8376635950178340080, guid: bcc188c55c8614f49984464e1a587696, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -95.4
+      value: -4.6
       objectReference: {fileID: 0}
     - target: {fileID: 8376635950178340080, guid: bcc188c55c8614f49984464e1a587696, type: 3}
       propertyPath: m_LocalRotation.w

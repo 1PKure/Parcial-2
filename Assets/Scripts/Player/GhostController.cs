@@ -19,6 +19,7 @@ public class GhostController : MonoBehaviour
 
     private bool isPossessing = false;
     public bool IsPossessing => isPossessing;
+    public Transform CurrentBodyTransform => currentBody != null ? currentBody.transform : null;
     private void Start()
     {
         playerHealth = GetComponent<PlayerHealth>();
@@ -31,7 +32,18 @@ public class GhostController : MonoBehaviour
         originalCamLocalPos = cameraHolder.localPosition;
         originalCamLocalRot = cameraHolder.localRotation;
     }
+    public Transform CurrentControlledTransform
+    {
+        get
+        {
+            // Si estás poseyendo y hay body, ese es el target real
+            if (isPossessing && currentBody != null)
+                return currentBody.transform;
 
+            // Si no, el target es el player
+            return playerController != null ? playerController.transform : transform;
+        }
+    }
     private void Update()
     {
         if (!isPossessing && Input.GetKeyDown(KeyCode.E))
