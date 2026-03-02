@@ -18,7 +18,7 @@
 
 ### ¿Qué hacer?
 
-> El objetivo es recolectar cinco piedras mágicas para desbloquear una roca especial que permite avanzar al siguiente nivel. Los enemigos tratarán de detenerte, ¡así que prepárate para esquivar, atacar o esconderte!
+> El objetivo es recolectar cinco piedras mágicas para desbloquear una roca especial que permite avanzar al siguiente nivel. En el segundo nivel te enfrentas a unos magos que atacan a distancia, asi que vas a tener que convertirte en una esfera para poder derrotarlos! Los enemigos tratarán de detenerte, ¡así que prepárate para esquivar, atacar o esconderte!
 
 ### ¿Cómo jugar?
 
@@ -28,12 +28,11 @@
 - **E**: Poseer
 - **Q**: Liberar
 - **Escape**: Pausar el juego y acceder al menú
+- **Shift**: Correr
 
 ### 📌 Características principales
 
 - Poseer objetos para resolver puzzles
-- Alternar camara en primera/tercera persona
-- Copiar habilidades de los enemigos
 - Enemigos con comportamientos únicos
 - Escenas con carga asincrónica y fake loading
 - Audio espacial 3D y música configurable
@@ -45,7 +44,7 @@
 
 **Nombre:** Matias Pulido  
 **Carrera:** Tecnicatura Superior en Programación de Videojuegos  
-**Año:** 2025  
+**Año:** 2026
 **Materia:** Motores I  
 **Profesor:** Federico Olive
 
@@ -53,13 +52,7 @@
 
 ## 🙌 Créditos
 
-- **Desarrollo:** Matias Pulido  
-- **Motor:** Unity  
-- **Lenguaje:** C#  
-- **Assets utilizados:**
-  - Kenny
-  - Varios
-- **Música y sonidos:** Footsteps Asset from Unity store & Argentum Online Music.
+Todos los creditos fueron agregados al juego.
 
 ---
 
