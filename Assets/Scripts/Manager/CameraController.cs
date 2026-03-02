@@ -10,23 +10,23 @@ public class CameraController : MonoBehaviour
     private bool isFirstPerson = true;
     private float transitionSpeed = 1.5f;
     public Transform target;
-    private PlayerController2 playerController;
-    private Camera activeCamera;
 
     void Start()
     {
-        SetCameraMode(true);
+        ForceFirstPerson();
         SetTarget(player);
     }
 
     void Update()
     {
-        
+
+        /*
         if (Input.GetKeyDown(KeyCode.C))
         {
             isFirstPerson = !isFirstPerson;
             SetCameraMode(isFirstPerson);
         }
+        */
 
         if (!isFirstPerson && thirdPersonCamera.gameObject.activeSelf && target != null)
         {
@@ -43,11 +43,22 @@ public class CameraController : MonoBehaviour
     void SetCameraMode(bool firstPerson)
     {
         firstPersonCamera.gameObject.SetActive(firstPerson);
-        thirdPersonCamera.gameObject.SetActive(!firstPerson);
+        //thirdPersonCamera.gameObject.SetActive(!firstPerson);
     }
 
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
+    }
+
+    public void ForceFirstPerson()
+    {
+        isFirstPerson = true;
+
+        if (firstPersonCamera != null)
+            firstPersonCamera.gameObject.SetActive(true);
+
+        if (thirdPersonCamera != null)
+            thirdPersonCamera.gameObject.SetActive(false);
     }
 }

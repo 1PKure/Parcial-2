@@ -61,6 +61,11 @@ public class PlayerController2 : Person
     }
     private bool JumpPressed => Input.GetKeyDown(KeyCode.Space);
     public bool IsPossessed { get; set; }
+    private void Awake()
+    {
+        if (config == null)
+            config = Resources.Load<PlayerControllerConfigSO>("PlayerControllerConfig");
+    }
     private void Start()
     {
         lastStepPosition = transform.position;
@@ -86,13 +91,14 @@ public class PlayerController2 : Person
         HandleJump();
         HandleRotation();
 
+        /*
         if (Input.GetKeyDown(KeyCode.C))
         {
             isFirstPerson = !isFirstPerson;
 
             cameraTransform = isFirstPerson ? firstPersonCameraTransform : thirdPersonCameraTransform;
         }
-
+        */
         TickStamina();
         TickFootsteps();
     }

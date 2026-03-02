@@ -16,8 +16,7 @@ public class WizardEnemyController : RangedEnemyController
         animator?.SetTrigger("Attack");
     }
 
-    public void 
-        PlayDieAnimation()
+    public void PlayDieAnimation()
     {
         animator?.SetTrigger("Die");
     }

@@ -3,37 +3,56 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class InteriorPortalGate : MonoBehaviour
 {
+    [Header("Refs")]
     [SerializeField] private InteriorLevelManager level;
+    [SerializeField] private VictoryPanelUI victoryPanel;
+
+    [Header("Possesing")]
+    [SerializeField] private bool blockIfPossessing = true;
     [SerializeField] private GhostController ghost;
 
-    private void Reset()
-    {
-        var col = GetComponent<Collider>();
-        col.isTrigger = true;
-    }
+    private Collider col;
+    private float lastBlockedMsgTime;
+    private UIManager uiManager;
 
     private void Awake()
     {
-        if (level == null) level = FindObjectOfType<InteriorLevelManager>();
-        if (ghost == null) ghost = FindObjectOfType<GhostController>();
+        col = GetComponent<Collider>();
+        col.isTrigger = true;
+
+        if (level == null) level = FindObjectOfType<InteriorLevelManager>(true);
+        if (victoryPanel == null) victoryPanel = FindObjectOfType<VictoryPanelUI>(true);
+        if (uiManager == null) uiManager = FindObjectOfType<UIManager>(true);
+        if (ghost == null) ghost = FindObjectOfType<GhostController>(true);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        var player = other.GetComponentInParent<PlayerController2>();
+        if (player == null) return;
 
         if (level != null && !level.AllWizardsDefeated)
         {
-            Debug.Log("No podés salir: faltan magos por derrotar.");
+            TryBlockedMessage("Portal: bloqueado");
             return;
         }
 
-        if (ghost != null && ghost.IsPossessing)
+        if (blockIfPossessing && ghost != null && ghost.IsPossessing)
         {
-            Debug.Log("No podés salir poseído: volvé a tu cuerpo.");
+            TryBlockedMessage("Volvé a tu cuerpo para usar el portal");
             return;
         }
 
-        Debug.Log("OK: portal habilitado, avanzar a la siguiente etapa.");
+        if (victoryPanel != null) victoryPanel.Show();
+        else Debug.LogError("[Portal] No hay VictoryPanelUI en escena.");
+    }
+
+    private void TryBlockedMessage(string msg)
+    {
+        if (Time.time - lastBlockedMsgTime < 1f) return;
+        lastBlockedMsgTime = Time.time;
+
+        if (uiManager != null) uiManager.ShowMessage(msg);
+        else Debug.Log(msg);
     }
 }

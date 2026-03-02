@@ -12,7 +12,8 @@ public class SceneLoader : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject loadingRoot;        
     [SerializeField] private CanvasGroup loadingGroup;       
-    [SerializeField] private Slider fakeLoadingBar;
+    [Tooltip("Image configurada como 'Filled'. Se usa fillAmount (0..1) como progress bar.")]
+    [SerializeField] private Image progressFill;
     [SerializeField] private TMP_Text loadingText;
 
     [Header("Fake Loading")]
@@ -51,8 +52,18 @@ public class SceneLoader : MonoBehaviour
         if (loadingGroup == null && loadingRoot != null)
             loadingGroup = loadingRoot.GetComponent<CanvasGroup>();
 
-        if (fakeLoadingBar == null)
-            fakeLoadingBar = GetComponentInChildren<Slider>(true);
+        if (progressFill == null)
+        {
+            var images = GetComponentsInChildren<Image>(true);
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i] != null && images[i].type == Image.Type.Filled)
+                {
+                    progressFill = images[i];
+                    break;
+                }
+            }
+        }
 
         if (loadingText == null)
             loadingText = GetComponentInChildren<TMP_Text>(true);
@@ -74,7 +85,7 @@ public class SceneLoader : MonoBehaviour
             loadingGroup.interactable = false;
         }
 
-        if (fakeLoadingBar != null) fakeLoadingBar.value = 0f;
+        if (progressFill != null) progressFill.fillAmount = 0f;
         if (loadingText != null) loadingText.text = "";
     }
 
@@ -105,7 +116,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            Debug.LogError($"[SceneLoader] Scene '{sceneName}' no est· en Build Settings o el nombre es incorrecto.");
+            Debug.LogError($"[SceneLoader] Scene '{sceneName}' no est√° en Build Settings o el nombre es incorrecto.");
             yield break;
         }
 
@@ -130,7 +141,7 @@ public class SceneLoader : MonoBehaviour
         float remaining = Mathf.Max(0f, minFakeDuration - elapsed);
         float fakeTime = remaining + extraFakePadding;
 
-        float current = fakeLoadingBar != null ? fakeLoadingBar.value : 0f;
+        float current = progressFill != null ? progressFill.fillAmount : 0f;
         float timer = 0f;
 
         while (timer < fakeTime)
@@ -155,7 +166,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (!SceneManager.GetSceneByName(sceneName).isLoaded)
         {
-            Debug.LogWarning($"[SceneLoader] Unload pedido pero '{sceneName}' no est· cargada.");
+            Debug.LogWarning($"[SceneLoader] Unload pedido pero '{sceneName}' no est√° cargada.");
             yield break;
         }
 
@@ -189,7 +200,7 @@ public class SceneLoader : MonoBehaviour
 
     private void SetProgress(float value, string text = null)
     {
-        if (fakeLoadingBar != null) fakeLoadingBar.value = value;
+        if (progressFill != null) progressFill.fillAmount = value;
         if (loadingText != null && !string.IsNullOrEmpty(text)) loadingText.text = text;
     }
 

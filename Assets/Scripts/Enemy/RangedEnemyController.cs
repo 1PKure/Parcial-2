@@ -16,6 +16,16 @@ public class RangedEnemyController : MonoBehaviour
     private GhostController ghost;
     private float lastAttackTime;
     private StateMachine stateMachine;
+    private EnemyTargeter targeter;
+
+    private void Awake()
+    {
+        ResolvePlayerIfNeeded();
+        if (player == null) return;
+
+        if (ghost == null)
+            ghost = FindObjectOfType<GhostController>(true);
+    }
     private void Start()
     {
         stateMachine = new StateMachine();
@@ -32,6 +42,21 @@ public class RangedEnemyController : MonoBehaviour
             if (target != null) return target;
         }
         return player;
+    }
+
+    private void ResolvePlayerIfNeeded()
+    {
+        if (player != null) return;
+
+        var pc = FindObjectOfType<PlayerController2>(true);
+        if (pc != null)
+        {
+            player = pc.transform;
+            return;
+        }
+        var go = GameObject.FindWithTag("Player");
+        if (go != null)
+            player = go.transform;
     }
     private void Update()
     {
@@ -50,6 +75,7 @@ public class RangedEnemyController : MonoBehaviour
 
     public bool PlayerInRange()
     {
+        ResolvePlayerIfNeeded();
         var target = GetTarget();
         if (target == null) return false;
         return Vector3.Distance(transform.position, target.position) < detectionRange;
@@ -57,6 +83,7 @@ public class RangedEnemyController : MonoBehaviour
 
     public void LookAtPlayer()
     {
+        ResolvePlayerIfNeeded();
         var target = GetTarget();
         if (target == null) return;
 
@@ -68,6 +95,7 @@ public class RangedEnemyController : MonoBehaviour
 
     public void Shoot()
     {
+        ResolvePlayerIfNeeded();
         var target = GetTarget();
         if (target == null || firePoint == null || projectilePrefab == null) return;
         if (Time.time < lastAttackTime + attackCooldown) return;

@@ -10,15 +10,20 @@ public class GameManager : MonoBehaviour
     public int totalStones = 5;
     public GameObject specialStone;
 
+
     private void Awake()
     {
+        if (transform.parent != null)
+            transform.SetParent(null);
+
+        DontDestroyOnLoad(gameObject);
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void LoadScene(string targetScene)
@@ -42,6 +47,9 @@ public class GameManager : MonoBehaviour
     private void UnlockRock()
     {
         UIManager.Instance.ShowMessage("¡Piedras completas! Roca desbloqueada.");
+
+        UIManager.Instance.HideStoneUI();
+
         if (specialStone != null)
             specialStone.SetActive(false);
     }

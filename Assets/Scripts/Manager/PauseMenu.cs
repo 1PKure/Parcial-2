@@ -18,10 +18,11 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Button[] buttonsWithSound;
     private bool isPaused = false;
     private PlayerController2 playerController;
+    private VictoryPanelUI victoryPanel;
 
     private void Start()
     {
-
+        victoryPanel = FindObjectOfType<VictoryPanelUI>(true);
         playerController = FindObjectOfType<PlayerController2>();
         AudioManager.Instance.InitSlider(masterSlider, "MasterVolume");
         AudioManager.Instance.InitSlider(sfxSlider, "SFXVolume");
@@ -33,6 +34,13 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        if (victoryPanel != null && victoryPanel.IsShowing)
+            return;
+        else
+        {
+            victoryPanel = FindObjectOfType<VictoryPanelUI>(true);
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!isPaused)
@@ -44,20 +52,34 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        AudioManager.Instance?.SetMusicPaused(true);
         isPaused = true;
         pausePanel.SetActive(true);
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.EnterUIMode();
         Time.timeScale = 0f;
+
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
         if (playerController != null) playerController.enabled = false;
     }
 
     public void CloseAllPanels()
     {
+        AudioManager.Instance?.SetMusicPaused(false);   
+
         isPaused = false;
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
         Time.timeScale = 1f;
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.ExitUIMode();
+
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         if (playerController != null) playerController.enabled = true;
     }

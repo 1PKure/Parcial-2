@@ -17,9 +17,9 @@ TagManager:
   - 
   - Ground
   - Enemy
-  - 
-  - 
-  - 
+  - Interactable
+  - Possesable
+  - Player
   - 
   - 
   - 

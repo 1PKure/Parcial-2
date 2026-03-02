@@ -15,6 +15,8 @@ public class AdditiveInteriorPortal : MonoBehaviour
     private static bool _interiorWasMoved;
     */
 
+    [SerializeField] private AudioClip interiorActionMusic;
+
     [Header("Interact")]
     [SerializeField] private KeyCode interactKey = KeyCode.F; 
     [SerializeField] private GameObject instructionText;
@@ -82,6 +84,9 @@ public class AdditiveInteriorPortal : MonoBehaviour
             while (SceneLoader.Instance != null && SceneLoader.Instance.IsLoading)
                 yield return null;
 
+            if (AudioManager.Instance != null && interiorActionMusic != null)
+                AudioManager.Instance.PlayMusic(interiorActionMusic, loop: true, volume: 1f);
+
             /*
             if (moveInteriorRoot && !_interiorWasMoved)
             {
@@ -90,7 +95,7 @@ public class AdditiveInteriorPortal : MonoBehaviour
             }
             */
 
- 
+
             if (_cachedInteriorSpawn == null)
                 _cachedInteriorSpawn = FindSpawnInScene(interiorSceneName, SpawnId.Interior);
 

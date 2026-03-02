@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 6202503438135348651}
   - component: {fileID: 6817036475439311204}
   - component: {fileID: 2070297292404343390}
+  - component: {fileID: -9088157509034267504}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -341,9 +342,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8958932713340094154}
   - {fileID: 2351305724697812481}
   - {fileID: 6944939174735865954}
+  - {fileID: 8958932713340094154}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2059887586603515413
@@ -358,31 +359,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec89ca5a0b6e2d54e84f8b6997b02333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAngleMovement: 30
-  moveSpeed: 30
+  config: {fileID: 0}
   groundCheck: {fileID: 1905290505490729808}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
-  jumpCooldown: 0.3
-  maxJumpCount: 2
-  audioSourceMusic: {fileID: 6196354584057327483}
+  stepDistanceWalk: 1.8
+  stepDistanceSprint: 1.2
+  minSpeedForSteps: 0.2
   audioSourceSteps: {fileID: 2520291742834928922}
   clips:
   - {fileID: 8300000, guid: fba95cafa5bba8649a7d269656e7317b, type: 3}
   - {fileID: 8300000, guid: c3f3efc1106f84643a38bd21f6826aaf, type: 3}
   - {fileID: 8300000, guid: 7c518e8469a403b4c981664ecb28a79a, type: 3}
   maxTimeAudio: 0.7
-  timeAudio: 0
   firstPersonCameraTransform: {fileID: 5173755530989661548}
   thirdPersonCameraTransform: {fileID: 6517643566835949278}
   pivot: {fileID: 8958932713340094154}
   cameraTransform: {fileID: 6658141186571258479}
-  jumpHeight: 5
-  gravity: -9.81
-  groundDistance: 0.4
-  lastJumpTime: -10
-  groundRayDistance: 3
+  sprintKey: 304
   isFirstPerson: 1
 --- !u!135 &7322386518387884174
 SphereCollider:
@@ -418,7 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  healthBar: {fileID: 0}
+  invulnerable: 0
 --- !u!54 &6817036475439311204
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -459,6 +454,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   possessionRange: 5
+--- !u!114 &-9088157509034267504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5202777633972941435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5599853b80b4b418930a60239a7a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6564500593861237686
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 4990549495402319685}
   - component: {fileID: 4173809989517335437}
   - component: {fileID: 1433305454194465517}
+  - component: {fileID: 6828449422153044832}
+  - component: {fileID: 5499604888515832195}
   m_Layer: 0
   m_Name: PossesableSphere
   m_TagString: Possessable
@@ -32,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -139.97083, y: 37.372, z: -106.693}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -162,3 +164,41 @@ MonoBehaviour:
   damageFactor: 10
   minDamage: 15
   minSpeedToDamage: 2.5
+--- !u!114 &6828449422153044832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039863014901157861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e516d971225f65343bf5f9fc06f0f842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  launchKey: 306
+  launchSpeed: 18
+  cooldown: 2
+  maxSpeed: 20
+  useCameraForward: 1
+--- !u!135 &5499604888515832195
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039863014901157861}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}

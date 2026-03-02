@@ -36,11 +36,9 @@ public class GhostController : MonoBehaviour
     {
         get
         {
-            // Si estás poseyendo y hay body, ese es el target real
             if (isPossessing && currentBody != null)
                 return currentBody.transform;
 
-            // Si no, el target es el player
             return playerController != null ? playerController.transform : transform;
         }
     }
@@ -134,5 +132,23 @@ public class GhostController : MonoBehaviour
 
         playerController.cameraTransform = cameraHolder;
         playerController.ResetRotation();
+
+        var cam = cameraHolder.GetComponentInChildren<Camera>(true);
+        if (cam != null)
+        {
+            cam.gameObject.SetActive(true);
+            cam.enabled = true;
+        }
+
+        var listener = cameraHolder.GetComponentInChildren<AudioListener>(true);
+        if (listener != null)
+        {
+            listener.gameObject.SetActive(true);
+            listener.enabled = true;
+        }
+
+        var camController = originalController.GetComponent<CameraController>();
+        if (camController != null)
+            camController.ForceFirstPerson();
     }
 }

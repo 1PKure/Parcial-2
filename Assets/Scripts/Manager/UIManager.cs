@@ -19,6 +19,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float messageDuration = 2f;
     private Coroutine currentMessageCoroutine;
 
+    public static bool IsUIOpen { get; private set; }
+    public void EnterUIMode()
+    {
+        IsUIOpen = true;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void ExitUIMode()
+    {
+        IsUIOpen = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -28,6 +42,9 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         SetTotalStones(GameManager.Instance.totalStones);
+
+        if (GameManager.Instance.HasAllStones())
+            HideStoneUI();
     }
 
     public void SetTotalStones(int amount)
@@ -38,7 +55,15 @@ public class UIManager : MonoBehaviour
 
     public void UpdateStoneUI(int collected)
     {
+        if (collected >= totalStones)
+        {
+            HideStoneUI();
+            return;
+        }
+
         stoneText.text = $"Piedras: {collected}/{totalStones}";
+        if (!stoneText.gameObject.activeSelf)
+            stoneText.gameObject.SetActive(true);
     }
 
     public void UpdateHealthUI(float current, float max)
@@ -64,5 +89,16 @@ public class UIManager : MonoBehaviour
         messageText.gameObject.SetActive(false);
     }
 
+    public void HideStoneUI()
+    {
+        if (stoneText != null)
+            stoneText.gameObject.SetActive(false);
+    }
+
+    public void ShowStoneUI()
+    {
+        if (stoneText != null)
+            stoneText.gameObject.SetActive(true);
+    }
 }
 
