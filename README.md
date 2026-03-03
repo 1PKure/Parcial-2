@@ -24,9 +24,9 @@
 
 - **WASD / Flechas**: Moverse
 - **Mouse**: Mirar alrededor
-- **Click izquierdo**: Interactuar
 - **E**: Poseer
 - **Q**: Liberar
+- **F**: Avanzar hacia el siguiente nivel
 - **Escape**: Pausar el juego y acceder al menú
 - **Shift**: Correr
 
