@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: f56c4275ec7794742a57b5240b31c3ed, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -452,7 +452,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -527}
+  m_AnchoredPosition: {x: 0, y: -473}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &578964330
@@ -475,8 +475,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: juego desarrollado por matias pulido para la materia de programacion con
-    motores
+  m_text: "juego desarrollado por matias pulido para la materia de \nprogramacion
+    con motores"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4914bfe26b1c5a54484ed26863d5ae4f, type: 2}
   m_sharedMaterial: {fileID: 2210435682791666696, guid: 4914bfe26b1c5a54484ed26863d5ae4f, type: 2}
@@ -485,8 +485,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293257016
-  m_fontColor: {r: 0.21787111, g: 0.9056604, b: 0.8987115, a: 1}
+    rgba: 4294770432
+  m_fontColor: {r: 0, g: 1, b: 0.9885714, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -503,8 +503,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -324.20395, y: -312.25067, z: -340.75858, w: 147.2237}
+  m_margin: {x: -407.14575, y: -312.25067, z: -340.75858, w: 131.3276}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1081,7 +1081,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -25}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2004919860
@@ -1104,8 +1104,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "assets:\n https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/battle-wizard-poly-art-128097\n\nhttps://assetstore.unity.com/packages/audio/sound-fx/foley/footsteps-essentials-189879\n\nhttps://kenney.nl/assets/mini-arena\n\nhttps://assetstore.unity.com/packages/3d/environments/landscapes/low-poly-simple-nature-pack-162153\n\nlow
-    poly nature pack - pva\n\nsoundtrack: argentum online\n"
+  m_text: "assets:\n https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/battle-wizard-poly-art-128097\n\nhttps://assetstore.unity.com/packages/audio/sound-fx/foley/footsteps-essentials-189879\n\nhttps://kenney.nl/assets/mini-arena\n\nhttps://assetstore.unity.com/packages/3d/environments/landscapes/low-poly-simple-nature-pack-162153\n\nprops:
+    low poly nature pack - pva\n\nsoundtrack: argentum online\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4914bfe26b1c5a54484ed26863d5ae4f, type: 2}
   m_sharedMaterial: {fileID: 2210435682791666696, guid: 4914bfe26b1c5a54484ed26863d5ae4f, type: 2}
@@ -1114,8 +1114,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293239435
-  m_fontColor: {r: 0.5453453, g: 0.63631445, b: 0.8962264, a: 1}
+    rgba: 4294962920
+  m_fontColor: {r: 0.9103774, g: 0.93328094, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1132,8 +1132,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

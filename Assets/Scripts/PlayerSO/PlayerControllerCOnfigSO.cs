@@ -14,6 +14,7 @@ public class PlayerControllerConfigSO : ScriptableObject
     public float gravity = -9.81f;
     public float groundDistance = 0.4f;
     public float groundRayDistance = 3f;
+    public float groundCheckRadius = 0.2f;
 
     [Header("Rotation / Camera")]
     public float mouseSensitivity = 200f;

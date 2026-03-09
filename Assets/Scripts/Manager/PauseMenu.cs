@@ -52,6 +52,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        RefreshPlayerController();
         AudioManager.Instance?.SetMusicPaused(true);
         isPaused = true;
         pausePanel.SetActive(true);
@@ -68,6 +69,10 @@ public class PauseMenu : MonoBehaviour
 
     public void CloseAllPanels()
     {
+        RefreshPlayerController();
+        if (playerController != null)
+            playerController.enabled = true;
+
         AudioManager.Instance?.SetMusicPaused(false);   
 
         isPaused = false;
@@ -102,7 +107,10 @@ public class PauseMenu : MonoBehaviour
         creditsPanel.SetActive(false);
         pausePanel.SetActive(true);
     }
-
+    private void RefreshPlayerController()
+    {
+        playerController = FindObjectOfType<PlayerController2>();
+    }
     public void QuitGame()
     {
 #if UNITY_EDITOR

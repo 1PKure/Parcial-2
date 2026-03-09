@@ -13,7 +13,7 @@ public class PlayerController2 : Person
     [SerializeField] private LayerMask groundMask;
     private int currentJumpCount = 0;
     [SerializeField] private float stepDistanceWalk = 1.8f;
-    [SerializeField] private float stepDistanceSprint = 1.2f; 
+    [SerializeField] private float stepDistanceSprint = 1.2f;
     [SerializeField] private float minSpeedForSteps = 0.2f;
 
     [Header("Audio")]
@@ -26,6 +26,11 @@ public class PlayerController2 : Person
     [SerializeField] public Transform thirdPersonCameraTransform;
     [SerializeField] public Transform pivot;
     [SerializeField] public Transform cameraTransform;
+
+    [SerializeField] private float slopeCheckDistance = 1.2f;
+    [SerializeField] private float steepSlideGravityMultiplier = 2.2f;
+    private bool isOnSteepSlope;
+    private Vector3 steepSlopeDownDir;
 
     [System.Serializable]
     public class FootstepLayerClip
@@ -78,6 +83,7 @@ public class PlayerController2 : Person
         }
         stamina = config.maxStamina;
         NotifyStaminaChanged();
+        EnsureFootstepAudioSource();
 
         Initialize();
         initialized = true;
@@ -86,7 +92,14 @@ public class PlayerController2 : Person
     private void Update()
     {
         if (!initialized) return;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        if (Time.timeScale == 0f) return;
+
+        if (!Cursor.visible)
+            Cursor.lockState = CursorLockMode.Locked;
+        rb.drag = isGrounded ? 8f : 0f;
+
+        UpdateSlopeState();
         stateMachine.Update();
         HandleJump();
         HandleRotation();
@@ -112,7 +125,14 @@ public class PlayerController2 : Person
     }
     public void Move(Vector3 moveDir)
     {
-        if (moveDir.sqrMagnitude > 1f) moveDir.Normalize();
+        if (moveDir.sqrMagnitude < 0.001f)
+        {
+            rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+            return;
+        }
+
+        if (moveDir.sqrMagnitude > 1f)
+            moveDir.Normalize();
 
         float speed = config.moveSpeed;
 
@@ -121,11 +141,27 @@ public class PlayerController2 : Person
         else if (!config.enableStamina && SprintHeld)
             speed *= config.sprintMultiplier;
 
-        Vector3 velocity = new Vector3(moveDir.x * speed, rb.velocity.y, moveDir.z * speed);
+        Vector3 currentVel = rb.velocity;
+        Vector3 desiredHorizontal = new Vector3(moveDir.x * speed, 0f, moveDir.z * speed);
+
+        if (isOnSteepSlope)
+        {
+            Vector3 downhill = steepSlopeDownDir.normalized;
+            float uphillDot = Vector3.Dot(desiredHorizontal.normalized, downhill);
+
+            if (desiredHorizontal.sqrMagnitude > 0.001f && uphillDot <= 0.1f)
+            {
+                desiredHorizontal = Vector3.zero;
+            }
+
+            Vector3 slideVelocity = downhill * speed;
+            rb.velocity = new Vector3(slideVelocity.x, currentVel.y, slideVelocity.z);
+            return;
+        }
 
         if (CanMove(moveDir))
         {
-            rb.velocity = velocity;
+            rb.velocity = new Vector3(desiredHorizontal.x, currentVel.y, desiredHorizontal.z);
         }
     }
     private void TickStamina()
@@ -208,20 +244,16 @@ public class PlayerController2 : Person
     private void PlayFootstep(float horizontalSpeed)
     {
         if (audioSourceSteps == null) return;
-        if (clips == null || clips.Count < 3) return;
+        if (clips == null || clips.Count == 0) return;
 
-        AudioClip clipToPlay = null;
+        AudioClip clipToPlay = clips[0];
 
-        if (TryGetTerrainUnderfoot(out Terrain terrain, out Vector3 hitPoint))
+        if (TryGetTerrainUnderfoot(out Terrain terrain, out Vector3 hitPoint) && terrain != null)
         {
             int idx = GetDominantTerrainTextureIndex(terrain, hitPoint);
-            idx = Mathf.Clamp(idx, 0, 2);
-
+            idx = Mathf.Clamp(idx, 0, clips.Count - 1);
             clipToPlay = clips[idx];
         }
-
-        if (clipToPlay == null)
-            clipToPlay = clips[0]; 
 
         audioSourceSteps.PlayOneShot(clipToPlay);
     }
@@ -252,15 +284,23 @@ public class PlayerController2 : Person
 
     private void HandleJump()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, config.groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(groundCheck.position, config.groundCheckRadius, groundMask);
 
-        if (isGrounded && rb.velocity.y < 0)
+        bool invalidSlopeForJump = IsOnInvalidSlopeForJump();
+
+        if (isGrounded && !invalidSlopeForJump)
         {
-            rb.velocity = new Vector3(rb.velocity.x, -2f, rb.velocity.z);
             currentJumpCount = 0;
         }
 
-        if (JumpPressed && currentJumpCount < config.maxJumpCount && Time.time > lastJumpTime + config.jumpCooldown)
+        if (invalidSlopeForJump)
+        {
+            return;
+        }
+
+        if (JumpPressed &&
+            currentJumpCount < config.maxJumpCount &&
+            Time.time > lastJumpTime + config.jumpCooldown)
         {
             float jumpForce = Mathf.Sqrt(config.jumpHeight * -2f * config.gravity);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
@@ -268,39 +308,54 @@ public class PlayerController2 : Person
             currentJumpCount++;
             AudioManager.Instance?.PlayJump();
         }
-
-        rb.velocity += new Vector3(0, config.gravity * Time.deltaTime, 0);
     }
+    private bool IsOnInvalidSlopeForJump()
+    {
+        Vector3 origin = groundCheck != null
+            ? groundCheck.position + Vector3.up * 0.15f
+            : transform.position + Vector3.up * 0.15f;
 
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 0.8f, groundMask))
+        {
+            float angle = Vector3.Angle(hit.normal, Vector3.up);
+            return angle > config.maxAngleMovement;
+        }
+
+        return false;
+    }
+    private void UpdateSlopeState()
+    {
+        isOnSteepSlope = false;
+        steepSlopeDownDir = Vector3.zero;
+
+        Vector3 origin = groundCheck != null ? groundCheck.position + Vector3.up * 0.2f : transform.position + Vector3.up * 0.2f;
+
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, slopeCheckDistance, groundMask))
+        {
+            float angle = Vector3.Angle(hit.normal, Vector3.up);
+
+            if (angle > config.maxAngleMovement)
+            {
+                isOnSteepSlope = true;
+                steepSlopeDownDir = Vector3.ProjectOnPlane(Vector3.down, hit.normal).normalized;
+            }
+        }
+    }
 
     private bool CanMove(Vector3 moveDir)
     {
         if (moveDir.sqrMagnitude < 0.0001f) return true;
 
-        if (Physics.Raycast(transform.position + Vector3.up * 0.2f, Vector3.down, out RaycastHit groundHit, 2f, groundMask))
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        float distance = 0.45f;
+        float radius = 0.25f;
+
+        if (Physics.SphereCast(origin, radius, moveDir.normalized, out RaycastHit hit, distance, groundMask))
         {
-            float groundAngle = Vector3.Angle(groundHit.normal, Vector3.up);
+            float angle = Vector3.Angle(hit.normal, Vector3.up);
 
-            if (groundAngle > config.maxAngleMovement)
-            {
-                Vector3 downhill = Vector3.ProjectOnPlane(Vector3.down, groundHit.normal).normalized;
-                if (Vector3.Dot(moveDir.normalized, downhill) <= 0.05f)
-                    return false;
-            }
-        }
-
-        float castDistance = 0.6f;
-        float radius = 0.35f;
-
-        Vector3 p1 = transform.position + Vector3.up * 0.2f;
-        Vector3 p2 = transform.position + Vector3.up * 1.6f;
-
-        if (Physics.CapsuleCast(p1, p2, radius, moveDir.normalized, out RaycastHit hit, castDistance, groundMask))
-        {
-            float hitAngle = Vector3.Angle(hit.normal, Vector3.up);
-
-            if (hitAngle > config.maxAngleMovement)
-            return false;
+            if (angle > config.maxAngleMovement)
+                return false;
         }
 
         return true;
@@ -385,15 +440,7 @@ public class PlayerController2 : Person
         sprintKey = template.sprintKey;
         clips = new List<AudioClip>(template.clips);
 
-        if (audioSourceSteps == null || audioSourceSteps == template.audioSourceSteps)
-        {
-            audioSourceSteps = GetComponent<AudioSource>();
-            if (audioSourceSteps == null)
-                audioSourceSteps = gameObject.AddComponent<AudioSource>();
-
-            audioSourceSteps.playOnAwake = false;
-            audioSourceSteps.spatialBlend = 0f; 
-        }
+        EnsureFootstepAudioSource();
         if (config == null)
             Debug.LogError("PlayerController2: No se pudo asignar PlayerControllerConfigSO desde el template.");
     }
@@ -412,19 +459,21 @@ public class PlayerController2 : Person
         terrain = null;
         hitPoint = default;
 
-        Vector3 origin = groundCheck != null ? groundCheck.position + Vector3.up * 0.5f : transform.position + Vector3.up * 0.5f;
+        Vector3 origin = groundCheck != null
+            ? groundCheck.position + Vector3.up * 0.5f
+            : transform.position + Vector3.up * 0.5f;
 
-        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, config.groundRayDistance))
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, config.groundRayDistance, groundMask))
         {
-            var terrainCol = hit.collider as TerrainCollider;
-if (terrainCol != null)
-{
-    terrain = terrainCol.GetComponent<Terrain>();
-}
-else
-{
-    terrain = hit.collider.GetComponent<Terrain>();
-}
+            hitPoint = hit.point;
+
+            TerrainCollider terrainCol = hit.collider as TerrainCollider;
+            if (terrainCol != null)
+                terrain = terrainCol.GetComponent<Terrain>();
+            else
+                terrain = hit.collider.GetComponent<Terrain>();
+
+            return terrain != null;
         }
 
         return false;
@@ -455,5 +504,18 @@ else
         }
 
         return best;
+    }
+
+    private void EnsureFootstepAudioSource()
+    {
+        if (audioSourceSteps == null)
+            audioSourceSteps = GetComponent<AudioSource>();
+
+        if (audioSourceSteps == null)
+            audioSourceSteps = gameObject.AddComponent<AudioSource>();
+
+        audioSourceSteps.playOnAwake = false;
+        audioSourceSteps.loop = false;
+        audioSourceSteps.spatialBlend = 0f;
     }
 }
